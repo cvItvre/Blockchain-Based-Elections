@@ -31,6 +31,10 @@ npm install -g truffle
 
 * [Ethereum Package Control](https://packagecontrol.io/packages/Ethereum) - Solidity Sintax Highlighting para o SublimeText 3.
 
+* [Mocha.js](https://mochajs.org/) - Framework de testes.
+
+* [Chai.js](https://www.chaijs.com/) - Biblioteca de assertions para os testes.
+
 ```
 1 Passo: Instalação do Package Control
   Instalação Simples
@@ -109,75 +113,118 @@ Arquivo que contém toda a configuração principal para o projeto Truffle.
 truffle migrate
 ```
 
+* Após alguma alteração no projeto, para remigrar o contrato
+
+```
+truffle migrate --reset
+```
+
+* Rodar os testes
+
+```
+truffle test
+```
+
+### Client-Side
+
+* Migrar o contrato
+
+```
+truffle migrate [--reset]
+```
+
+* Iniciar o Light Server
+
+```
+npm run dev
+```
+> Na primeira vez o browser irá abrir provavelmente na porta 3000, o que significa que não está concetado à Blockchain local.
+
 ## How to Interact
 
 ### Console
 
-1. Após fazer o deploy do contrato abra o console do truffle.
+**1. Após fazer o deploy do contrato abra o console do truffle.**
 
 ```
-truffle console
+truffle console  
 ```
 
-2. Instancie o contrato.
+**2. Instancie o contrato.**
 
 ```
-Elections.deployed().then(function(i) { app = i })
+Elections.deployed().then(function(i) { app = i; })
 ```
-> Nesse momento a variável app é uma instância do nosso contrato.
+> Nesse momento a variável app é uma instância do nosso contrato.  
 
-
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+**3. Para acessar uma variável de estado, por exemplo elecitonCount, só precisamos chamá-la:**
 
 ```
-Give an example
+app.electionCount()
+```
+> Solidity cria automaticamente getters para nossas variáveis de estado, por isso, para chamar a variável utilizamos os parênteses.  
+
+**4. Para acessar e manipular mappings:**
+
+```
+app.elections("Eleicoes 2018")
+```
+> Função get gerada automaticamente pelo Solidity para acessar um mapping.  
+
+```
+app.elections("Eleicoes 2018").then(function(e) {eleicao = e;})
+```
+> Variável eleicao é uma instância do mapping da Eleição 2018.  
+
+```
+eleicao[0]
+```
+> Para acessar cada atributo de uma estrutura.
+
+```
+eleicao[3].toNumber()
+```
+> Converter o tempo de abertura da eleição para número.  
+> Obs.: Strings não precisam ser convertidas no console.  
+
+**5. Acessar as contas da Blockchain com Web3**
+
+```
+web3.eth.accounts
+```
+> web3 = biblioteca  
+> eth  = objeto  
+
+**6. Referenciar contas individualmente**
+
+```
+web3.eth.accounts[0]
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
+**7. Utilizar Metadatas**
 
 ```
-Give an example
+eleicao.vote("Eleicao 2018", 99, { from: web3.eth.accounts[2] })
+```
+> Metadata 'from' será usado como msg.sender no contrato.
+
+### Client-Side
+
+**1. Conectar a Blockchain local com Metamask**
+
+```
+> Abra o metamask e conecte-se à um Custom RPC;
+> No Ganache, copie a url do RPC Server e cole no Metamask (http://localhost:7545);
+> Clique em Save.
 ```
 
-## Deployment
+**2. Importando contas para o Metamask**
 
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+```
+> Vá ao Ganache e escolha a conta;
+> Clique em "Show Keys" e copie a chave;
+> Vá ao Metamask e clique em "Import Account";
+> Escolha a opção de importar a partir de uma chave privada;
+> Cole a chave e importe;
+> Atualize a página.
+```
