@@ -31,10 +31,6 @@ npm install -g truffle
 
 * [Ethereum Package Control](https://packagecontrol.io/packages/Ethereum) - Solidity Sintax Highlighting para o SublimeText 3.
 
-* [Mocha.js](https://mochajs.org/) - Framework de testes.
-
-* [Chai.js](https://www.chaijs.com/) - Biblioteca de assertions para os testes.
-
 ```
 1 Passo: Instalação do Package Control
   Instalação Simples
@@ -61,6 +57,10 @@ import urllib.request,os,hashlib; h = '6f4c264a24d933ce70df5dedcf1dcaee' + 'ebe0
 > Reinicie o Sublime.
 
 ```
+
+* [Mocha.js](https://mochajs.org/) - Framework de testes.
+
+* [Chai.js](https://www.chaijs.com/) - Biblioteca de assertions para os testes.
 
 ### Understanding the Project Architecture
 
