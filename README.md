@@ -85,7 +85,7 @@ Este diretório é onde ficam todos os nossos arquivos de migração.
 * **Os diretórios e arquivos: /mirations/1_initial_migration.js**  
 Primeiro arquivo de migração, necessário para implantar nossos contratos para a Blockchain, porque quando fazemos isso, nós estamos criando uma transação na Blockchain, estamos mudando seu estado, assim como ocorre em um banco de dados.
 
-* **Os diretórios e arquivos: /mirations/2_election_migration.js**
+* **Os diretórios e arquivos: /mirations/2_election_migration.js**  
 Arquivo de migração para implantar o contrato Elections.sol para conseguirmos interagir com ele no console do Truffle
 
 * **Os diretórios e arquivos: /node_modules/**  
