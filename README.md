@@ -22,7 +22,7 @@ Se aparecer a versão do node, ele foi instalado com sucesso.
 ```
 Para instalar o Truffle vá ao terminal e digite:
 
-npm install -g truffle
+npm install -g truffle@4.0.5
 ```
 
 * [Ganache](https://truffleframework.com/ganache) - Blockchain local para o teste de DApps.
