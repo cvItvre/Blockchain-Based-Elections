@@ -9,6 +9,4 @@ server.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-Election.initWeb3();
-
 server.listen(3000);

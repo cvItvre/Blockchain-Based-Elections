@@ -1,49 +1,40 @@
 const Web3 = require('web3');
-const electionsJSON = require('../../build/contracts/Elections.json');
+const fs = require('fs');
+const solc = require('solc');
+// const electionsJSON = require('../../build/contracts/Elections.json');
 
-let web3Provider = null;
-const contracts = {};
-const account = '0x0';
-const hasVoted = false;
+const web3 = new Web3(Web3.givenProvider || 'ws://localhost:7545', null, {});
 
-let web3 = new Web3();
+const abi = fs.readFileSync('./build/contracts/Elections.json', 'utf8');
+const bytecode = fs.readFileSync('./build/contracts/Elections.bytecode', 'utf8');
+const gasEstimate = web3.eth.estimateGas({ data: bytecode });
+const MyContract = web3.eth.Contract(JSON.parse(abi));
+console.log(MyContract);
+const myContractReturned = MyContract.new(
+  {
+    from: web3.eth.coinbase,
+    data: bytecode,
+    gas: gasEstimate,
+  },
+  (err, myContract) => {
+    if (!err) {
+      // NOTE: The callback will fire twice!
+      // Once the contract has the transactionHash property set and once its deployed on an address.
+      // e.g. check tx hash on the first call (transaction send)
+      if (!myContract.address) {
+        // The hash of the transaction, which deploys the contract
+        console.log(myContract.transactionHash);
 
-const teste = async () => {
-  try {
-    const deployed = contracts.Elections.deployed();
-    console.log(deployed);
-  } catch (e) {
-    console.error(e);
-  }
-};
+        // check address on the second call (contract deployed)
+      } else {
+        console.log(myContract.address); // the contract address
+      }
+      // Note that the returned "myContractReturned" === "myContract",
+      // so the returned "myContractReturned" object will also get the address set.
+    }
+  },
+);
 
-const initContract = () => {
-  // Instantiate a new truffle contract from the artifact
-  contracts.Elections = web3.eth.Contract(electionsJSON);
-  // Connect provider to interact with contract
-  contracts.Elections.setProvider(web3Provider);
+console.log(myContractReturned);
 
-  // listenForEvents();
-
-  // return render();
-  return teste();
-};
-
-const initWeb3 = () => {
-  if (typeof web3 !== 'undefined') {
-    // If a web3 instance is already provided by Meta Mask.
-    web3Provider = web3.currentProvider;
-    web3 = new Web3(web3.currentProvider);
-  } else {
-    // Specify default instance if no web3 instance provided
-    web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
-    web3 = new Web3(web3Provider);
-  }
-
-  console.log(web3Provider);
-  return initContract();
-};
-
-module.exports = {
-  initWeb3,
-};
+// https://github.com/ethereum/wiki/wiki/JavaScript-API#web3ethcontract
