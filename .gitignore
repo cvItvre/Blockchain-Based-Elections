@@ -9,7 +9,6 @@
 
 # production
 /frontend/build
-/backend/build
 
 # misc
 /frontend/.DS_Store
