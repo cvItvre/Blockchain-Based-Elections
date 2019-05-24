@@ -1,40 +1,28 @@
+const solc = require('solc');
 const Web3 = require('web3');
 const fs = require('fs');
-const solc = require('solc');
-// const electionsJSON = require('../../build/contracts/Elections.json');
 
-const web3 = new Web3(Web3.givenProvider || 'ws://localhost:7545', null, {});
+const web3 = new Web3('http://127.0.0.1:7545');
+web3.eth.transactionConfirmationBlocks = 1;
 
-const abi = fs.readFileSync('./build/contracts/Elections.json', 'utf8');
-const bytecode = fs.readFileSync('./build/contracts/Elections.bytecode', 'utf8');
-const gasEstimate = web3.eth.estimateGas({ data: bytecode });
-const MyContract = web3.eth.Contract(JSON.parse(abi));
-console.log(MyContract);
-const myContractReturned = MyContract.new(
-  {
-    from: web3.eth.coinbase,
-    data: bytecode,
-    gas: gasEstimate,
-  },
-  (err, myContract) => {
-    if (!err) {
-      // NOTE: The callback will fire twice!
-      // Once the contract has the transactionHash property set and once its deployed on an address.
-      // e.g. check tx hash on the first call (transaction send)
-      if (!myContract.address) {
-        // The hash of the transaction, which deploys the contract
-        console.log(myContract.transactionHash);
+const electionsSOL = fs.readFileSync('./contracts/Elections.sol', 'utf8');
+// const ownerAddress = '0x12D31fce5cb8640EcC171518eab723DDD0588Ce4';
+const compiledContract = solc.compile(electionsSOL, 1).contracts[':Elections'];
+const contractAbi = compiledContract.interface;
 
-        // check address on the second call (contract deployed)
-      } else {
-        console.log(myContract.address); // the contract address
-      }
-      // Note that the returned "myContractReturned" === "myContract",
-      // so the returned "myContractReturned" object will also get the address set.
-    }
-  },
-);
+// para set's
+// const options = {
+//   from: ownerAddress,
+//   gas: 3000000,
+// };
 
-console.log(myContractReturned);
+const getCountElections = async (contractAddress) => {
+  const myContract = new web3.eth.Contract(JSON.parse(contractAbi), contractAddress);
+  const result = await myContract.methods.electionCount().call();
 
-// https://github.com/ethereum/wiki/wiki/JavaScript-API#web3ethcontract
+  return result.toNumber();
+};
+
+module.exports = {
+  getCountElections,
+};
