@@ -110,10 +110,10 @@ const getCandidate = async (contractAddress, data) => {
 
     const candidateData = {};
 
-    candidateData._id = result['0'].toNumber();
-    candidateData._name = result['1'];
-    candidateData._number = result['2'].toNumber();
-    candidateData._voteCount = result['3'].toNumber();
+    candidateData.id = result['0'].toNumber();
+    candidateData.name = result['1'];
+    candidateData.number = result['2'].toNumber();
+    candidateData.voteCount = result['3'].toNumber();
 
     return JSON.stringify(candidateData);
   } catch (e) {
@@ -143,14 +143,14 @@ const getElections = async (contractAddress, data) => {
 
     const electionData = {};
 
-    electionData._electionID = result._electionID.toNumber();
-    electionData._electionAdmin = result._electionAdmin;
-    electionData._electionName = result._electionName;
-    electionData._emailDomain = result._emailDomain;
-    electionData._openingTime = result._openingTime.toNumber();
-    electionData._closingTime = result._closingTime.toNumber();
-    electionData._candidatesCount = result._candidatesCount.toNumber();
-    electionData._votersCount = result._votersCount.toNumber();
+    electionData.electionID = result._electionID.toNumber();
+    electionData.electionAdmin = result._electionAdmin;
+    electionData.electionName = result._electionName;
+    electionData.emailDomain = result._emailDomain;
+    electionData.openingTime = result._openingTime.toNumber();
+    electionData.closingTime = result._closingTime.toNumber();
+    electionData.candidatesCount = result._candidatesCount.toNumber();
+    electionData.votersCount = result._votersCount.toNumber();
 
     return JSON.stringify(electionData);
   } catch (e) {
