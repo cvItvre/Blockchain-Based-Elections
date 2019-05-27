@@ -1,0 +1,267 @@
+[
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_electionID",
+				"type": "uint256"
+			},
+			{
+				"name": "_candidateName",
+				"type": "string"
+			},
+			{
+				"name": "_candidateNumber",
+				"type": "uint256"
+			}
+		],
+		"name": "addCandidates",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_electionName",
+				"type": "string"
+			},
+			{
+				"name": "_emailDomain",
+				"type": "string"
+			},
+			{
+				"name": "_openingTime",
+				"type": "uint256"
+			},
+			{
+				"name": "_closingTime",
+				"type": "uint256"
+			}
+		],
+		"name": "createElection",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_electionID",
+				"type": "uint256"
+			},
+			{
+				"name": "_email",
+				"type": "string"
+			}
+		],
+		"name": "giveRightToVote",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_electionID",
+				"type": "uint256"
+			},
+			{
+				"name": "_candidateID",
+				"type": "uint256"
+			}
+		],
+		"name": "vote",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_electionID",
+				"type": "uint256"
+			},
+			{
+				"name": "_email",
+				"type": "string"
+			}
+		],
+		"name": "canVote",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "contractOwner",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "electionCount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "elections",
+		"outputs": [
+			{
+				"name": "_electionID",
+				"type": "uint256"
+			},
+			{
+				"name": "_electionAdmin",
+				"type": "address"
+			},
+			{
+				"name": "_electionName",
+				"type": "string"
+			},
+			{
+				"name": "_emailDomain",
+				"type": "string"
+			},
+			{
+				"name": "_openingTime",
+				"type": "uint256"
+			},
+			{
+				"name": "_closingTime",
+				"type": "uint256"
+			},
+			{
+				"name": "_candidatesCount",
+				"type": "uint256"
+			},
+			{
+				"name": "_votersCount",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_electionID",
+				"type": "uint256"
+			},
+			{
+				"name": "_candidateID",
+				"type": "uint256"
+			}
+		],
+		"name": "getCandidate",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_electionID",
+				"type": "uint256"
+			},
+			{
+				"name": "_email",
+				"type": "string"
+			}
+		],
+		"name": "hasVoted",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_electionID",
+				"type": "uint256"
+			}
+		],
+		"name": "winner",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]

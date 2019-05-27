@@ -1,5 +1,5 @@
 const Web3 = require('web3');
-const contractAbi = require('../../build/contracts/Elections.json').abi;
+const contractAbi = require('../../contracts/ElectionsABI.json');
 
 const web3 = new Web3('http://127.0.0.1:7545');
 web3.eth.transactionConfirmationBlocks = 1;
@@ -78,7 +78,11 @@ const getCountElections = async (contractAddress) => {
     const myContract = new web3.eth.Contract(contractAbi, contractAddress);
     const result = await myContract.methods.electionCount().call();
 
-    return result.toNumber();
+    const resultJSON = {
+      countElection: result.toNumber(),
+    };
+
+    return JSON.stringify(resultJSON);
   } catch (e) {
     console.error(e);
   }
@@ -89,7 +93,11 @@ const getWinner = async (contractAddress, data) => {
     const myContract = new web3.eth.Contract(contractAbi, contractAddress);
     const result = await myContract.methods.winner(data.electionID).call();
 
-    return result;
+    const resultJSON = {
+      winner: result,
+    };
+
+    return JSON.stringify(resultJSON);
   } catch (e) {
     console.error(e);
   }
@@ -107,7 +115,7 @@ const getCandidate = async (contractAddress, data) => {
     candidateData._number = result['2'].toNumber();
     candidateData._voteCount = result['3'].toNumber();
 
-    return candidateData;
+    return JSON.stringify(candidateData);
   } catch (e) {
     console.error(e);
   }
@@ -118,7 +126,11 @@ const getContractOwner = async (contractAddress) => {
     const myContract = new web3.eth.Contract(contractAbi, contractAddress);
     const result = await myContract.methods.contractOwner().call();
 
-    return result;
+    const resultJSON = {
+      contractOwner: result,
+    };
+
+    return JSON.stringify(resultJSON);
   } catch (e) {
     console.error(e);
   }
@@ -140,7 +152,37 @@ const getElections = async (contractAddress, data) => {
     electionData._candidatesCount = result._candidatesCount.toNumber();
     electionData._votersCount = result._votersCount.toNumber();
 
-    return electionData;
+    return JSON.stringify(electionData);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+const canVote = async (contractAddress, data) => {
+  try {
+    const myContract = web3.eth.Contract(contractAbi, contractAddress);
+    const result = await myContract.methods.canVote(data.electionID, data.email).call();
+
+    const resultJSON = {
+      canVote: result,
+    };
+
+    return JSON.stringify(resultJSON);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+const hasVoted = async (contractAddress, data) => {
+  try {
+    const myContract = web3.eth.Contract(contractAbi, contractAddress);
+    const result = await myContract.methods.hasVoted(data.electionID, data.email).call();
+
+    const resultJSON = {
+      hasVoted: result,
+    };
+
+    return JSON.stringify(resultJSON);
   } catch (e) {
     console.error(e);
   }
@@ -156,4 +198,6 @@ module.exports = {
   sendAddCandidate,
   sendGiveRightToVote,
   sendVote,
+  canVote,
+  hasVoted,
 };

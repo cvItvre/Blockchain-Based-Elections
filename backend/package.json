@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "nodemon ./server.js",
+    "test_temp": "nodemon ./test/test.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

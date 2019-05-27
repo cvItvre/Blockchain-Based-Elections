@@ -68,6 +68,24 @@ contract Elections {
         return (candidate._id, candidate._name, candidate._number, candidate._voteCount);
     }
 
+    function canVote(
+      uint256 _electionID,
+      string memory _email)
+      public view returns(bool) {
+        if (elections[_electionID]._emailToAdress[_email] == 0x0000000000000000000000000000000000000000) {
+          return false;
+        }
+
+        return true;
+      }
+
+    function hasVoted(
+      uint256 _electionID,
+      string memory _email)
+      public view returns(bool) {
+        return elections[_electionID]._voters[elections[_electionID]._emailToAdress[_email]]._isVoted;
+      }
+
     function createElection(
         string memory _electionName,
     	string memory _emailDomain,
