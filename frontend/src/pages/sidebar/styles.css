@@ -1,0 +1,23 @@
+.side-bar-left {
+    background: #700070;
+    width: 75px;
+    height: 50%;
+    border-radius: 5px;
+    position: fixed;
+    top: 25%;
+    padding: 5px;
+}
+
+.side-bar-left a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.side-bar-left a:hover {
+    background: rgba(255,255,255, 0.3);
+}
