@@ -1,0 +1,6 @@
+#page1-content {
+  background: #999;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 100vh;
+}

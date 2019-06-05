@@ -1,14 +1,14 @@
 .main-sidebar {
   background: #700070;
-  width: 150px;
-  height: 100px;
-  display: block;
-  border-radius: 5px;
-  padding: 5px;
-  position: absolute;
+  width: 125px;
+  height: 50%;
+  padding: 20px;
+  position: fixed;
   margin: auto;
-  top: 0;
+  top: 25%;
   right: auto;
-  bottom: 0;
-  left: 0;
+  bottom: auto;
+  left: 0px;
+  z-index: 1;
+  box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.7);
 }
