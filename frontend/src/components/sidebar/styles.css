@@ -1,14 +1,20 @@
 .main-sidebar {
-  background: #700070;
+  background: #3f273f;
+  box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.7);
   width: 125px;
-  height: 50%;
+  height: 100%;
   padding: 20px;
   position: fixed;
-  margin: auto;
-  top: 25%;
-  right: auto;
-  bottom: auto;
-  left: 0px;
-  z-index: 1;
-  box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.7);
+  top: 0px;
+  left: -70px;
+  z-index: -1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 1s;
 }
+
+.main-sidebar:hover {
+  left: 0px;
+}
+

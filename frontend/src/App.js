@@ -13,10 +13,11 @@ import './styles.css';
 
 const App = () => (
   <div className="App">
-    <SideBar />
-    <Footer />
-
     <Header />
+
+    <SideBar />
+
+    <Footer />
   </div>
 );
 

@@ -15,3 +15,19 @@
 .button-sidebar:hover {
   background: rgba(255, 255, 255, 0.3);
 }
+
+.button-sidebar-exp {
+  margin-bottom: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #0000ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-sidebar-exp img {
+  width: 30px;
+  height: 30px;
+}

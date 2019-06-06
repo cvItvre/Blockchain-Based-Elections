@@ -4,7 +4,7 @@ import './styles.css';
 
 const footer = () => (
   <footer id="main-footer">
-    <div>Footer Content</div>
+    Footer Content
   </footer>
 );
 
