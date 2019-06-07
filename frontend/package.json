@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "chart.js": "^2.8.0",
     "classnames": "^2.2.6",
     "primeicons": "^1.0.0",
     "primereact": "^3.1.4",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "0.9.5",
-    "react-transition-group": "^4.1.0",
-    "prop-types": "^15.7.2"
+    "react-transition-group": "^4.1.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",

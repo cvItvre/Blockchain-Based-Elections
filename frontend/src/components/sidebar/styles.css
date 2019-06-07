@@ -1,16 +1,16 @@
 .main-sidebar {
   background: #3f273f;
   box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.7);
-  width: 125px;
+  width: 80px;
   height: 100%;
-  padding: 20px;
   position: fixed;
   top: 0px;
-  left: -70px;
+  left: -40px;
   z-index: -1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   transition: all 1s;
 }
 

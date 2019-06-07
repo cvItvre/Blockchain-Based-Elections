@@ -7,12 +7,6 @@ import './styles.css';
 const button = (props) => {
   const { url, description, image } = props;
 
-  /*return (
-    <a className="button-sidebar" href={url}>
-      {description}
-    </a>
-  );*/
-
   return (
     <a className="button-sidebar-exp" href={url}>
       <img src={image} />
