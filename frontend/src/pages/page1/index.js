@@ -2,7 +2,7 @@ import React from 'react';
 
 import './styles.css';
 
-import SideBar from '../../sidebar';
+import SideBar from '../../components/sidebar';
 
 const page1 = () => (
   <main id="page1-content">

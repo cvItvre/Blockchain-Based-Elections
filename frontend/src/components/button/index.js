@@ -21,8 +21,8 @@ const button = (props) => {
 };
 
 button.propTypes = {
-  url: PropTypes.isRequired,
-  description: PropTypes.isRequired,
+  url: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
 };
 
 export default button;
