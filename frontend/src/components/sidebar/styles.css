@@ -1,20 +1,20 @@
 .main-sidebar {
   background: #3f273f;
-  box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.7);
-  width: 80px;
+  box-shadow: 1px 0px 4px rgba(0, 0, 0, 0.7);
+  width: 200px;
   height: 100%;
+  padding: 10px;
   position: fixed;
-  top: 0px;
-  left: -40px;
-  z-index: -1;
+  top: 0;
+  left: -145px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  transition: all 1s;
+  align-items: flex-end;
+  transition: all 0.5s;
 }
 
 .main-sidebar:hover {
-  left: 0px;
+  left: 0;
 }
 

@@ -1,0 +1,63 @@
+.main-content {
+    padding: 70px 0;
+    margin: 0 auto;
+    width: 800px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+}
+
+.chart-content {
+    background: #d9d9d9;
+    box-shadow: 5px 7px 3px grey;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.input-content {
+    margin-top: 25px;
+}
+
+.input-content #input-email{
+    color: black;
+    width: 250px;
+    border: 1px solid #67049e;
+}
+
+.input-content #input-email:focus, #input-code:focus{
+    box-shadow: 0 0 3px #67049e;
+}
+
+.input-content .lb-input{
+    color: #67049e;
+    font-weight: bold;
+}
+
+.bt-input-send {
+    background: #f3f3f3;
+    border: 1px solid #089e00;
+    border-radius: 0 10px 10px 0;
+    margin-left: -2px;
+    width: 80px;
+    height: 40px;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.bt-input-send:hover {
+    color: #f3f3f3;
+    background: #089e00;
+}
+
+.code-content {
+    margin-top: 20px;    
+}
+
+.input-content #input-code{
+    color: black;
+    border: 1px solid #67049e;
+}
