@@ -5,7 +5,7 @@
   box-sizing: border-box;
 }
 
-html, body {
+html {
   min-height: 100%;
   position: relative;
 }
