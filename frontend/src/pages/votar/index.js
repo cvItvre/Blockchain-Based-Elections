@@ -5,16 +5,12 @@ import { InputText } from 'primereact/inputtext';
 import './styles.css'
 
 class votar extends Component {
-    sendEmail() {
-        const inputEmail = document.querySelector('#input-email');
-        console.log('Envia email para ' + inputEmail.value)
-    }
-
-    render() {
-        //dados estaticos
+    constructor(props) {
+        super(props);
         this.state = {
             data: {
                 electionName: 'Eleição 1',
+                domain: '@ufrpe.br',
                 labels: ['candidate1', 'candidate2', 'candidate3', 'candidate4',],
                 datasets: [{
                     data: [100, 50, 300, 186],
@@ -23,32 +19,66 @@ class votar extends Component {
                 }],
             },
         };
+    }
 
+    sendEmail(e) {
+        const inputEmail = document.querySelector('#input-email');
+        const domain = inputEmail.getAttribute('data-domain'); //verificar isso
+        const domainEscaped = domain.replace('\.', '\\.');
+        const regex = new RegExp('.+' + domainEscaped + '$', 'g');
+        console.log(regex, inputEmail.value)
+
+        if (inputEmail.value.match(regex)) {
+            //enviar email
+            //se tudo ok, recebe um código
+            const randomCode = Math.random().toString(36).slice(-10);
+            console.log('Código gerado: ' + randomCode)
+            localStorage.setItem('CODE', randomCode)
+        } else {
+            console.log('Email com domínio inválido!');
+        }
+    }
+
+    verifyCode(e) {
+        const inputCode = document.querySelector('#input-code');
+        const code = localStorage.getItem('CODE');
+
+        if (code === inputCode.value) {
+            console.log('Código correto');
+            localStorage.removeItem('CODE');
+        } else {
+            console.log('Código incorreto');
+        }
+    }
+
+    render() {
+        //dados estaticos
         const { data } = this.state;
 
         return (
-        <main className="main-content">
-            <h1>{ data.electionName }</h1>
-            <section className="chart-content">
-                <Chart type="pie" data={ data } />
-            </section>
-            <section className="input-content">
-                <span className="p-float-label">
-                    <InputText id="input-email"/>
-                    <label className="lb-input" htmlFor="email" >Email</label>
-                    <button className="bt-input-send" onClick={ this.sendEmail }>Enviar</button>
-                </span>
-            </section>
-            <section className="input-content">
-                <span className="p-float-label">
-                    <InputText id="input-code"/>
-                    <label className="lb-input" htmlFor="code" >Code</label>
-                    <button className="bt-input-send">Verificar</button>
-                </span>
-            </section>
-        </main>
+            <main className="main-content">
+                <h1>{data.electionName}</h1>
+                <section className="chart-content">
+                    <Chart type="pie" data={data} />
+                </section>
+                <section className="input-content">
+                    <span className="p-float-label">
+                        <InputText id="input-email" data-domain={data.domain} />
+                        <label className="lb-input" htmlFor="email" >Email</label>
+                        <span className="domain-input-send" >{data.domain}</span>
+                        <button className="bt-input-send" onClick={this.sendEmail}>Enviar</button>
+                    </span>
+                </section>
+                <section className="input-content">
+                    <span className="p-float-label">
+                        <InputText id="input-code" />
+                        <label className="lb-input" htmlFor="code" >Code</label>
+                        <button className="bt-input-code" onClick={this.verifyCode}>Verificar</button>
+                    </span>
+                </section>
+            </main>
         );
-       
+
     }
 }
 

@@ -28,6 +28,12 @@
     border: 1px solid #67049e;
 }
 
+.input-content #input-code{
+    color: black;
+    border: 1px solid #67049e;
+    padding-bottom: 8px;
+}
+
 .input-content #input-email:focus, #input-code:focus{
     box-shadow: 0 0 3px #67049e;
 }
@@ -40,24 +46,31 @@
 .bt-input-send {
     background: #f3f3f3;
     border: 1px solid #089e00;
-    border-radius: 0 10px 10px 0;
-    margin-left: -2px;
+    border-radius: 10px;
     width: 80px;
     height: 40px;
     font-weight: bold;
     transition: all 0.3s;
 }
 
-.bt-input-send:hover {
+.bt-input-code {
+    background: #f3f3f3;
+    border: 1px solid #089e00;
+    border-left: 1px solid #67049e;
+    border-radius: 0 3px 3px 0;
+    margin-left: -3px;
+    width: 80px;
+    height: 35px;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.domain-input-send {
+    margin: 0 5px;
+    font-weight: bold;
+}
+
+.bt-input-send:hover, .bt-input-code:hover {
     color: #f3f3f3;
     background: #089e00;
-}
-
-.code-content {
-    margin-top: 20px;    
-}
-
-.input-content #input-code{
-    color: black;
-    border: 1px solid #67049e;
 }

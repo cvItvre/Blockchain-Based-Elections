@@ -6,12 +6,12 @@
   padding: 10px;
   position: fixed;
   top: 0;
-  left: -145px;
+  left: -130px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
-  transition: all 0.5s;
+  transition: all 0.3s;
 }
 
 .main-sidebar:hover {

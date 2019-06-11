@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "dev": "nodemon ./server.js",
+    "dev": "nodemon ./src/Controllers/SendEmailController.js",
     "test_temp": "nodemon ./test/test.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "express": "^4.17.0",
+    "nodemailer": "^6.2.1",
     "web3": "^1.0.0-beta.55"
   }
 }
