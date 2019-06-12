@@ -1,11 +1,13 @@
 const Web3 = require('web3');
 const contractAbi = require('../../contracts/ElectionsABI.json');
 
+const addressContract = ''
 const web3 = new Web3('http://127.0.0.1:7545');
 web3.eth.transactionConfirmationBlocks = 1;
 
-const sendVote = async (contractAddress, ownerAddress, voteData) => {
+const sendVote = async (req, res) => {
   try {
+    const { ownerAddress, voteData } = JSON.parse(req.body);
     const myContract = new web3.eth.Contract(contractAbi, contractAddress);
 
     const gas = await myContract.methods
@@ -16,13 +18,16 @@ const sendVote = async (contractAddress, ownerAddress, voteData) => {
       from: ownerAddress,
       gas,
     });
+
+    res.send();
   } catch (e) {
-    console.error(e);
+    res.status(500).send();
   }
 };
 
-const sendGiveRightToVote = async (contractAddress, ownerAddress, voter) => {
+const sendGiveRightToVote = async (req, res) => {
   try {
+    const { ownerAddress, voter } = JSON.parse(req.body);
     const myContract = new web3.eth.Contract(contractAbi, contractAddress);
     const gas = await myContract.methods
       .giveRightToVote(voter.electionID, voter.email)
@@ -32,13 +37,16 @@ const sendGiveRightToVote = async (contractAddress, ownerAddress, voter) => {
       from: ownerAddress,
       gas,
     });
+
+    res.send();
   } catch (e) {
-    console.error(e);
+    res.status(500).send();
   }
 };
 
-const sendAddCandidate = async (contractAddress, ownerAddress, candidate) => {
+const sendAddCandidate = async (req, res) => {
   try {
+    const { ownerAddress, candidate } = JSON.parse(req.body);
     const myContract = new web3.eth.Contract(contractAbi, contractAddress);
     const gas = await myContract.methods
       .addCandidates(candidate.electionID, candidate.name, candidate.number)
@@ -50,13 +58,16 @@ const sendAddCandidate = async (contractAddress, ownerAddress, candidate) => {
         from: ownerAddress,
         gas,
       });
+
+    res.send();
   } catch (e) {
-    console.error(e);
+    res.status(500).send();
   }
 };
 
-const sendCreateElection = async (contractAddress, ownerAddress, election) => {
+const sendCreateElection = async (req, res) => {
   try {
+    const { ownerAddress, election } = JSON.parse(req.body);
     const myContract = new web3.eth.Contract(contractAbi, contractAddress);
     const gas = await myContract.methods
       .createElection(election.name, election.domain, election.opening, election.closing)
@@ -68,12 +79,14 @@ const sendCreateElection = async (contractAddress, ownerAddress, election) => {
         from: ownerAddress,
         gas,
       });
+
+    res.send();
   } catch (e) {
-    console.error(e);
+    res.status(500).send();
   }
 };
 
-const getCountElections = async (contractAddress) => {
+const getCountElections = async (req, res) => {
   try {
     const myContract = new web3.eth.Contract(contractAbi, contractAddress);
     const result = await myContract.methods.electionCount().call();
@@ -82,14 +95,15 @@ const getCountElections = async (contractAddress) => {
       countElection: result.toNumber(),
     };
 
-    return JSON.stringify(resultJSON);
+    res.json(JSON.stringify(resultJSON));
   } catch (e) {
-    console.error(e);
+    res.status(500).send();
   }
 };
 
-const getWinner = async (contractAddress, data) => {
+const getWinner = async (req, res) => {
   try {
+    const { data } = JSON.parse(req.body);
     const myContract = new web3.eth.Contract(contractAbi, contractAddress);
     const result = await myContract.methods.winner(data.electionID).call();
 
@@ -97,14 +111,15 @@ const getWinner = async (contractAddress, data) => {
       winner: result,
     };
 
-    return JSON.stringify(resultJSON);
+    res.json(JSON.stringify(resultJSON));
   } catch (e) {
-    console.error(e);
+    res.status(500).send();
   }
 };
 
-const getCandidate = async (contractAddress, data) => {
+const getCandidate = async (req, res) => {
   try {
+    const { data } = JSON.parse(req.body);
     const myContract = new web3.eth.Contract(contractAbi, contractAddress);
     const result = await myContract.methods.getCandidate(data.electionID, data.candidateID).call();
 
@@ -115,13 +130,13 @@ const getCandidate = async (contractAddress, data) => {
     candidateData.number = result['2'].toNumber();
     candidateData.voteCount = result['3'].toNumber();
 
-    return JSON.stringify(candidateData);
+    res.json(JSON.stringify(candidateData));
   } catch (e) {
-    console.error(e);
+    res.status(500).send();
   }
 };
 
-const getContractOwner = async (contractAddress) => {
+const getContractOwner = async (req, res) => {
   try {
     const myContract = new web3.eth.Contract(contractAbi, contractAddress);
     const result = await myContract.methods.contractOwner().call();
@@ -130,14 +145,15 @@ const getContractOwner = async (contractAddress) => {
       contractOwner: result,
     };
 
-    return JSON.stringify(resultJSON);
+    res.json(JSON.stringify(resultJSON));
   } catch (e) {
-    console.error(e);
+    res.status(500).send();
   }
 };
 
-const getElections = async (contractAddress, data) => {
+const getElections = async (req, res) => {
   try {
+    const { data } = JSON.parse(req.body);
     const myContract = new web3.eth.Contract(contractAbi, contractAddress);
     const result = await myContract.methods.elections(data.electionID).call();
 
@@ -152,13 +168,13 @@ const getElections = async (contractAddress, data) => {
     electionData.candidatesCount = result._candidatesCount.toNumber();
     electionData.votersCount = result._votersCount.toNumber();
 
-    return JSON.stringify(electionData);
+    res.json(JSON.stringify(electionData));
   } catch (e) {
-    console.error(e);
+    res.status(500).send();
   }
 };
 
-const canVote = async (contractAddress, data) => {
+const canVote = async (data) => {
   try {
     const myContract = web3.eth.Contract(contractAbi, contractAddress);
     const result = await myContract.methods.canVote(data.electionID, data.email).call();
@@ -173,8 +189,9 @@ const canVote = async (contractAddress, data) => {
   }
 };
 
-const hasVoted = async (contractAddress, data) => {
+const hasVoted = async (data) => {
   try {
+    const { data } = JSON.parse(req.body);
     const myContract = web3.eth.Contract(contractAbi, contractAddress);
     const result = await myContract.methods.hasVoted(data.electionID, data.email).call();
 
@@ -182,9 +199,9 @@ const hasVoted = async (contractAddress, data) => {
       hasVoted: result,
     };
 
-    return JSON.stringify(resultJSON);
+    res.json(JSON.stringify(resultJSON));
   } catch (e) {
-    console.error(e);
+    res.status(500).send();
   }
 };
 
