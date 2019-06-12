@@ -31,9 +31,7 @@ class votar extends Component {
         if (inputEmail.value.match(regex)) {
             //enviar email
             //se tudo ok, recebe um código
-            const randomCode = Math.random().toString(36).slice(-10);
-            console.log('Código gerado: ' + randomCode)
-            localStorage.setItem('CODE', randomCode)
+
         } else {
             console.log('Email com domínio inválido!');
         }
@@ -45,7 +43,6 @@ class votar extends Component {
 
         if (code === inputCode.value) {
             console.log('Código correto');
-            localStorage.removeItem('CODE');
         } else {
             console.log('Código incorreto');
         }
