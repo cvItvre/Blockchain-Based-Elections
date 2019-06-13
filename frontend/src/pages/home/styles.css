@@ -1,0 +1,79 @@
+.home-content {
+  position: absolute;
+  margin: auto;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 75%;
+  min-width: 630px;
+  min-height: 340px;
+  /* width: 825px; */
+  height: 75%;
+  /* height: 525px; */
+  /* background: #ff0000; */
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.election-description {
+  position: relative;
+  background: rgba(255, 255, 255, 0.7);
+  width: 47%;
+  /* width: 96%; */
+  height: 44%;
+  /* border: 2px solid #000000; */
+  margin-top: 2%;
+  margin-left: 2%;
+  border-radius: 5px;
+  padding: 2px;
+  display: flex;
+  flex-wrap: wrap;
+  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+.election-description strong {
+  padding: 10px;
+  width: 100%;
+  height: 40px;
+  color: #4a4a4a;
+  font-weight: bold;
+  font-size: 15pt;
+  /* background: #0000ff; */
+  text-align: center;
+}
+
+.chartjs-render-monitor {
+  position: absolute;
+  top: -50%;
+}
+
+.election-description ul {
+  height: 50%;
+  width: 50%;
+  padding-left: 10px;
+  /* margin-left: 5%; */
+  /* margin-top: -20px; */
+  /* margin-top: 25px; */
+  list-style: none;
+  /* background: #00ff00; */
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.election-description li {
+  margin-top: 10px;
+  font-size: 10pt;
+  color: #4a4a4a;
+  /* background: #0000ff; */
+}
+
+.election-description ul li div {
+  width: 10px;
+  height: 10px;
+  display: inline-flex;
+  margin: 10px;
+  margin-top: auto;
+  margin-bottom: auto;
+}

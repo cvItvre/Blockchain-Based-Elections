@@ -8,9 +8,12 @@ const button = (props) => {
   const { url, description, image } = props;
 
   return (
-    <a className="button-sidebar-exp" href={url}>
-      <img src={image} />
-    </a>
+    <div className="button-sidebar-wrapper">
+      <a className="button-sidebar" href={url}>
+        <img src={image} />
+      </a>
+      <strong>{description}</strong>
+    </div>
   );
 };
 
