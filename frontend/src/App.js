@@ -14,17 +14,12 @@ import 'primeicons/primeicons.css';
 import './styles.css';
 
 const App = () => ( <
-  div className = "App" >
-  <
-  Header / >
-  <
-  Home / >
-  <
-  SideBar / >
-  <
-  Footer / >
-  <
-  /div>
+  <div className="App">
+    <Header />
+    <Home />
+    <SideBar />
+    <Footer />
+  </div>
 );
 
 export default App;
