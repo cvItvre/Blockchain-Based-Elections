@@ -1,0 +1,47 @@
+.main-form {
+  min-height: 500px;
+}
+
+.main-form h1 {
+  text-align: center;
+  color: #ffff;
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 20px;
+  margin-bottom: 5px;
+  border: 1px inset #ffffff;
+  background-image: linear-gradient(to right, rgba(97, 54, 97, 1), rgba(97, 54, 97, 0.6))
+}
+
+.main-form h2 {
+  text-align: center;
+  color: #67049e;
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 15px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+.bt-input-confirm {
+  background: #f3f3f3;
+  border: 1px solid #089e00;
+  border-radius: 10px;
+  position: absolute;
+  width: 400px;
+  height: 40px;
+  margin-top: 150px;
+  margin-left: 8%;
+  font-weight: bold;
+  transition: all 0.3s;
+  cursor: pointer;
+
+}
+
+
+
+.bt-input-confirm:hover {
+  color: #f3f3f3;
+  background: #089e00;
+
+}
