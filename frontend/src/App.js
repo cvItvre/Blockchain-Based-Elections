@@ -13,13 +13,15 @@ import 'primeicons/primeicons.css';
 
 import './styles.css';
 
-const App = () => ( <
-  <div className="App">
-    <Header />
-    <Home />
-    <SideBar />
-    <Footer />
+
+const App = () => ( 
+  <div className = "App" >
+    <Header/>
+    <SideBar/>
+    <Home/>
+    <Footer/>
   </div>
 );
 
 export default App;
+
