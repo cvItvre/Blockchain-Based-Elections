@@ -78,6 +78,9 @@ export default class RegisterElection extends Component {
     this.nonEmptyValues = () => {
       let bool = false;
 
+      console.log(this.state.electionName.length, this.state.domain.length, this.state.calendarBegin.toString(), this.state.calendarEnd.toString().length,
+      this.state.candidates.length);
+
       if(this.state.electionName.length > 0 && this.state.domain.length > 0 && this.state.calendarBegin.toString().length > 0 
       && this.state.calendarEnd.toString().length > 0 && this.state.candidates.length > 0) {
         bool = true;

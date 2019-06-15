@@ -61,7 +61,7 @@ export default class ConfirmationForm extends Component {
         <br/>
 
         <h1>Candidatos</h1> {candidatos.map(
-                      cand => <h2>{cand.toString()}</h2>
+                      (cand, index) => <h2 key={index} >{cand.toString()}</h2>
                       )
                     }
 
