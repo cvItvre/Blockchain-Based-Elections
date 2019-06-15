@@ -5,7 +5,7 @@ const contractCode = require('../contracts/ElectionsBytecode.json').object;
 const web3 = new Web3('http://127.0.0.1:7545');
 web3.eth.transactionConfirmationBlocks = 1;
 
-const ownerAddress = '0x86544D44C6A63621DDDc410D9abFEce49ca0246B'; // mudar para um endereço valido do ganache
+const ownerAddress = '0x12D31fce5cb8640EcC171518eab723DDD0588Ce4'; // mudar para um endereço valido do ganache
 
 const MyContract = new web3.eth.Contract(contractAbi);
 
@@ -21,6 +21,6 @@ const deployElectionContract = async () => {
   return instance;
 };
 
-module.exports = {
-  deployElectionContract,
-};
+deployElectionContract().then((instance) => {
+  console.log(instance.address);
+});
