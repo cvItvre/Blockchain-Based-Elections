@@ -3,8 +3,8 @@ import React from 'react';
 import Header from './components/header';
 import Footer from './components/footer';
 import SideBar from './components/sidebar';
-// import Home from './pages/home';
-import Votar from './pages/votar';
+import Home from './pages/home';
+// import Votar from './pages/votar';
 // import RegisterElection from './pages/registerElection'
 
 import 'primereact/resources/themes/nova-light/theme.css';
@@ -15,9 +15,9 @@ import './styles.css';
 
 const App = () => (
   <div className="App">
-    <Header />
     <SideBar />
-    <Votar />
+    {/* <Header /> */}
+    <Home />
     <Footer />
   </div>
 );

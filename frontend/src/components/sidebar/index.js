@@ -4,12 +4,14 @@ import Button from '../button';
 
 import './styles.css';
 
+import homeLogo from './images/home-rounded-icons-100.png';
+
 const sideBar = () => (
   <div className="main-sidebar">
     <Button
       url="https://www.w3schools.com/css/css_positioning.asp"
-      description="CSS Positioning"
-      image="https://store-images.s-microsoft.com/image/apps.10154.13703813498146682.59ea0965-457f-440d-a02e-2a8fce6ff46e.06a50486-5efa-40ad-8f7f-155c1eb61ea3?mode=scale&q=90&h=225&w=150"
+      description="Home"
+      image={homeLogo}
     />
     <Button
       url="https://www.youtube.com/watch?v=TI4v4Y8yRjw&t=15s"
