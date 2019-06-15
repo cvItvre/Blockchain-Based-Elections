@@ -20,6 +20,7 @@ const button = (props) => {
 button.propTypes = {
   url: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
 };
 
 export default button;

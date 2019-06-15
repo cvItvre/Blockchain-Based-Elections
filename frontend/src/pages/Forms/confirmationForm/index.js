@@ -60,9 +60,10 @@ export default class ConfirmationForm extends Component {
           
         <br/>
 
-        <h1>Candidatos</h1> <h2>{candidatos.map(
-                      cand => cand+', ')
-                    }</h2>
+        <h1>Candidatos</h1> {candidatos.map(
+                      cand => <h2>{cand.toString()}</h2>
+                      )
+                    }
 
 
           <button className="bt-input-confirm" onClick={this.confirmarCadastro}>Cadastrar</button>

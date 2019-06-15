@@ -55,6 +55,19 @@ export default  class Formulario1 extends Component{
             this.props.onCandidatesChange(_candidates);
 
         }
+
+        let br = {
+            firstDayOfWeek: 1,
+            dayNames: ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira", "sábado"],
+            dayNamesShort: ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"],
+            dayNamesMin: ["DOM", "SEG", "TER", "QUI", "QUA", "SEX", "SAB"],
+            monthNames: ["janeira", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"],
+            monthNamesShort: ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"],
+            today: 'Hoje',
+            clear: 'Limpo',
+            dateFormat: 'dd/mm/yy',
+            weekHeader: 'Sm'
+        };
     
         return (
             <form className="main-form">
@@ -74,16 +87,16 @@ export default  class Formulario1 extends Component{
                        
                        
 
-                        <Calendar id="calendar-input-begin" value={this.state.calendarBegin} onChange={(e) => this.handleCalendarBeginChange(e.value)} showTime={true} showSeconds={true} />
+                        <Calendar locale={br} minDate={this.minDate} id="calendar-input-begin" dateFormat="dd/mm/yy" value={this.state.calendarBegin} onChange={(e) => this.handleCalendarBeginChange(e.value)} showTime={true} readOnlyInput={true} />
                         <label className="lb-input-esp" htmlFor="calendar-input-begin" >data e hora de início</label>
                         
-                        <Calendar id="calendar-input-end" value={this.state.calendarEnd} onChange={(e) => this.handleCalendarEndChange(e.value)} showTime={true} showSeconds={true} />
+                        <Calendar locale={br} minDate={this.state.calendarBegin} id="calendar-input-end" dateFormat="dd/mm/yy" value={this.state.calendarEnd} onChange={(e) => this.handleCalendarEndChange(e.value)} showTime={true} readOnlyInput={true} />
                         <label className="lb-input-esp2" htmlFor="calendar-input-end" >data e hora de fim</label>
                     </div>
 
 
                     <span className="p-float-label">
-                        <Chips value={this.state.candidates} id="cadidates-input-id" value={this.state.candidates} onChange={(e) => this.handleCandidatesChange(e.value)}></Chips>
+                        <Chips value={this.state.candidates} id="cadidates-input-id" value={this.state.candidates} onChange={(e) => this.handleCandidatesChange(e.value)} ></Chips>
                         <label className="lb-input" htmlFor="cadidates-input-id" >Candidatos</label>
                     </span>
                     
