@@ -62,6 +62,10 @@ export default class RegisterElection extends Component {
     this.messages.show({severity: 'error', summary: 'Erro', detail: 'Domínio inválido!'});
   }
 
+  invalidFormat() {
+    this.messages.show({severity: 'error', summary: 'Erro', detail: 'Formato de candidato inválido!'});
+  }
+
   clear() {
       this.messages.clear();
   }
@@ -155,6 +159,9 @@ export default class RegisterElection extends Component {
     }
 
     this.handleCandidates = (_candidates) => {
+      if(_candidates === false) {
+        this.invalidFormat();
+      }
       this.setState({
         candidates: _candidates
       });

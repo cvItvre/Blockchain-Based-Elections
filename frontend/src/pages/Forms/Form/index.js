@@ -51,8 +51,27 @@ export default  class Formulario1 extends Component{
         }
 
         this.handleCandidatesChange = (_candidates) => {
-            this.setState({candidates: _candidates});
-            this.props.onCandidatesChange(_candidates);
+            let slice = '';
+            let lastElement = _candidates.slice(-1)[0];
+            let regex = /^[a-zà-úâ-ôã A-ZÀ-ÚÂ-ÔÃ]{2,20}\([0-9]{1,30}\)$/;
+
+            if(_candidates[0] === 'Aceitos: Amaury Tavares (10) ou Amaury Tavares(10)') {
+                slice = _candidates.slice(1);
+            }else {
+                slice = _candidates;
+            }
+            
+            
+            if(typeof lastElement === 'undefined') {
+                slice = '';
+            }
+
+            if(regex.test(lastElement) || typeof lastElement === 'undefined') {
+                this.setState({candidates: slice});
+                this.props.onCandidatesChange(slice);
+            }else {
+                this.props.onCandidatesChange(false);
+            }
 
         }
 
@@ -68,6 +87,8 @@ export default  class Formulario1 extends Component{
             dateFormat: 'dd/mm/yy',
             weekHeader: 'Sm'
         };
+
+        let arrayAux = ['Aceitos: Amaury Tavares (10) ou Amaury Tavares(10)']
     
         return (
             <form className="main-form">
@@ -96,7 +117,7 @@ export default  class Formulario1 extends Component{
 
 
                     <span className="p-float-label">
-                        <Chips value={this.state.candidates} id="cadidates-input-id" value={this.state.candidates} onChange={(e) => this.handleCandidatesChange(e.value)} ></Chips>
+                        <Chips id="cadidates-input-id" value={this.state.candidates.length === 0 ? arrayAux : this.state.candidates} onChange={(e) => this.handleCandidatesChange(e.value)} ></Chips>
                         <label className="lb-input" htmlFor="cadidates-input-id" >Candidatos</label>
                     </span>
                     
