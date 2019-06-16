@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import {InputText} from 'primereact/inputtext';
 import {Chips} from 'primereact/chips';
 import {Calendar} from 'primereact/calendar';
-import './styles.css'
+import {Messages} from 'primereact/messages';
+
+import './styles.css';
 
 
 export default  class Formulario1 extends Component{
@@ -19,8 +21,6 @@ export default  class Formulario1 extends Component{
         };
         
     }
-
-
 
     render () {
 
@@ -45,33 +45,38 @@ export default  class Formulario1 extends Component{
         }
 
         this.handleCalendarEndChange = (_calendarEnd) => {
-            this.setState({calendarEnd: _calendarEnd});
-            this.props.onCalendarEndChange(_calendarEnd);
-
+          this.setState({calendarEnd: _calendarEnd});
+          this.props.onCalendarEndChange(_calendarEnd);
+          
         }
-
+          
         this.handleCandidatesChange = (_candidates) => {
-            let slice = '';
-            let lastElement = _candidates.slice(-1)[0];
-            let regex = /^[a-zà-úâ-ôã A-ZÀ-ÚÂ-ÔÃ]{2,20}\([0-9]{1,30}\)$/;
+          
+          let slice = '';
+          let lastElement = _candidates.slice(-1)[0];
+          let regex = /^[a-zà-úâ-ôã A-ZÀ-ÚÂ-ÔÃ]{2,20}\([0-9]{1,30}\)$/;
 
-            if(_candidates[0] === 'Aceitos: Amaury Tavares (10) ou Amaury Tavares(10)') {
-                slice = _candidates.slice(1);
-            }else {
-                slice = _candidates;
-            }
-            
-            
-            if(typeof lastElement === 'undefined') {
-                slice = '';
-            }
-
-            if(regex.test(lastElement) || typeof lastElement === 'undefined') {
-                this.setState({candidates: slice});
-                this.props.onCandidatesChange(slice);
-            }else {
-                this.props.onCandidatesChange(false);
-            }
+          if(_candidates[0] === 'Aceitos: Amaury Tavares (10) ou Amaury Tavares(10)') {
+              slice = _candidates.slice(1);
+          }else {
+              slice = _candidates;
+          }
+          
+          // if(typeof lastElement === 'undefined') {
+          //     slice = '';
+          // }
+          
+          if(regex.test(lastElement) || typeof lastElement === 'undefined') {
+            this.setState({candidates: slice});
+            this.props.onCandidatesChange(slice);
+          }else {
+            this.messages.show({
+              severity: 'info',
+              summary: 'Formatos aceitos: ',
+              detail: 'Amaury Tavares (10) ou Amaury Tavares(10)'
+            })
+            this.props.onCandidatesChange(false);
+          }
 
         }
 
@@ -95,30 +100,36 @@ export default  class Formulario1 extends Component{
             <fieldset >
                 <legend>Cadastro</legend>
                 <span className="input-content">
-                    <span className="p-float-label">
+                    <span className="election-name-wrapper">
+                        <label className="lb-input">Nome da Eleição</label>
                         <InputText value={this.state.electionName} onChange={this.handleElectionChange } id="input-election-name"/>
-                        <label className="lb-input" htmlFor="input-election-name" >Nome da Eleição</label>
                     </span>
                 
 
                     <div className="p-float-label">
 
+                      <div className="p-float-label-input">
+                        <label >Domínio</label>
                         <InputText value={'@'+this.state.domain} onChange={this.handleDomainChange } id="input-domain-address"/>
-                       <label className="lb-input" htmlFor="input-domain-address" >Domínio</label>
-                       
-                       
+                      </div>
 
+                      <div className="p-float-label-input">
+                        <label>Data e hora de início</label>
                         <Calendar locale={br} minDate={this.minDate} id="calendar-input-begin" dateFormat="dd/mm/yy" value={this.state.calendarBegin} onChange={(e) => this.handleCalendarBeginChange(e.value)} showTime={true} readOnlyInput={true} />
-                        <label className="lb-input-esp" htmlFor="calendar-input-begin" >data e hora de início</label>
+                      </div>
                         
+                      <div className="p-float-label-input">
+                        <label>Data e hora de fim</label>
                         <Calendar locale={br} minDate={this.state.calendarBegin} id="calendar-input-end" dateFormat="dd/mm/yy" value={this.state.calendarEnd} onChange={(e) => this.handleCalendarEndChange(e.value)} showTime={true} readOnlyInput={true} />
-                        <label className="lb-input-esp2" htmlFor="calendar-input-end" >data e hora de fim</label>
+                      </div>
                     </div>
 
 
-                    <span className="p-float-label">
-                        <Chips id="cadidates-input-id" value={this.state.candidates.length === 0 ? arrayAux : this.state.candidates} onChange={(e) => this.handleCandidatesChange(e.value)} ></Chips>
-                        <label className="lb-input" htmlFor="cadidates-input-id" >Candidatos</label>
+                    <span className="candidates-input-wrapper">
+                        <label className="lb-input" >Candidatos</label>
+                        {/* <Chips id="cadidates-input-id" value={this.state.candidates.length === 0 ? arrayAux : this.state.candidates} onChange={(e) => this.handleCandidatesChange(e.value)} ></Chips> */}
+                        <Chips id="cadidates-input-id" value={this.state.candidates} onChange={(e) => this.handleCandidatesChange(e.value)} ></Chips>
+                        <Messages ref={(el) => this.messages = el} />
                     </span>
                     
                 </span>

@@ -37,27 +37,23 @@ export default class ConfirmationForm extends Component {
 
 
         <h1>Nome da Eleição</h1>
-          <h2>{nomeEleicao}</h2>
-          {console.log(nomeEleicao)}
-          
+        <h2>{nomeEleicao}</h2>
+        {/* {console.log(nomeEleicao)} */}
         <br/>
         
         <h1>Domínio</h1> 
-          <h2>{dominio}</h2>
-          {console.log(dominio)}
-        
+        <h2>{dominio}</h2>
+        {/* {console.log(dominio)} */}
         <br/>
 
         <h1>Data e Hora de início</h1> 
-          <h2>{calendarIni.toString()}</h2>
-          {console.log(calendarIni)}
-          
+        <h2>{calendarIni.toString()}</h2>
+        {/* {console.log(calendarIni)} */}
         <br/>
 
         <h1>Data e Hora de fim</h1> 
-          <h2>{calendarFim.toString()}</h2>
-          {console.log(calendarFim)}
-          
+        <h2>{calendarFim.toString()}</h2>
+        {/* {console.log(calendarFim)} */}
         <br/>
 
         <h1>Candidatos</h1> {candidatos.map(
@@ -66,7 +62,7 @@ export default class ConfirmationForm extends Component {
                     }
 
 
-          <button className="bt-input-confirm" onClick={this.confirmarCadastro}>Cadastrar</button>
+        <button className="bt-input-confirm" onClick={this.confirmarCadastro}>Cadastrar</button>
 
       </span>
 

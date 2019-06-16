@@ -1,5 +1,5 @@
 .main-content {
-
+  /* background: #ff0000; */
   padding: 70px 0;
   margin: 0 auto;
   width: 800px;
@@ -8,7 +8,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
 }
 
 .main-content h2 {
@@ -18,19 +17,25 @@
   border: 0;
   font-size: 25px;
   font-family: "Open Sans", "Helvetica Neue", sans-serif;
-  color: #67049e;
+  color: rgb(82, 51, 82);;
   font-weight: bold;
 }
 
 .steps-content {
+  background: #f3f3f3;
   padding: 15px;
   margin: 0px 0px 10%;
   z-index: 0;
   border-radius: 10px;
   width: 80%;
-  background: #d9d9d9;
-  box-shadow: 5px 7px 5px grey;
+  /* background: #d9d9d9; */
+  /* box-shadow: 5px 7px 5px grey; */
+  box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.7);
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
 }
 
@@ -38,12 +43,15 @@ body .p-component {
   font-size: 50px;
 }
 
-
-div .steps-custom ul {
-  display: flex;
-  justify-content: center;
+.steps-custom ul .p-steps-item {
+  width: 50%;
 }
 
-div .steps-custom a {
-  width: 120px;
+.steps-custom ul .p-highlight a {
+  width: 100%;
 }
+
+div .steps-custom {
+  width: 80%;
+}
+

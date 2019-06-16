@@ -5,7 +5,7 @@ import Footer from './components/footer';
 import SideBar from './components/sidebar';
 import Home from './pages/home';
 // import Votar from './pages/votar';
-// import RegisterElection from './pages/registerElection'
+import RegisterElection from './pages/registerElection'
 
 import 'primereact/resources/themes/nova-light/theme.css';
 import 'primereact/resources/primereact.min.css';
@@ -16,8 +16,9 @@ import './styles.css';
 const App = () => (
   <div className="App">
     <SideBar />
-    {/* <Header /> */}
-    <Home />
+    <Header />
+    <RegisterElection />
+    {/* <Home /> */}
     <Footer />
   </div>
 );

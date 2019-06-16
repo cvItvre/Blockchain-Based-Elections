@@ -2,24 +2,26 @@
   display: block;
   flex-direction: column;
   align-content: center;
-
 }
 
 fieldset {
+  /* background: rgba(0, 0, 255,0.2); */
   border: 2px solid #613661;
   -moz-border-radius: 8px;
   -webkit-border-radius: 8px;
   border-radius: 8px;
   min-height: 400px;
-
+  padding-top: 30px;
 
 }
 
-.input-content div {
-  position: inline-block;
+.input-content .p-float-label {
+  /* position: inline-flex; */
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 20px;
-
-
+  margin-top: 20px;
+  /* background: #0000ff; */
 }
 
 legend {
@@ -29,28 +31,36 @@ legend {
   font-weight: bold;
 }
 
+.input-content .p-float-label .p-float-label-input {
+  position: relative;
+  /* background: #00ff00; */
+  /* border: 2px solid black; */
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-content .p-float-label .p-float-label-input label {
+ /* background: #00ff00; */
+ position: absolute;
+ top: -10px;
+ color: #67049e;
+ font-weight: bold;
+ margin-left: 7px;
+}
 
 .input-content .lb-input {
+  position: absolute;
   color: #67049e;
   font-weight: bold;
-  margin: -11px 9px;
+  margin-left: 10px;
 }
 
-.input-content .lb-input-esp {
+.input-content .lb-input {
+  position: relative;
   color: #67049e;
   font-weight: bold;
-  width: 300px;
-  margin: -9px 230px;
 }
-
-.input-content .lb-input-esp2 {
-  color: #67049e;
-  font-weight: bold;
-  width: 300px;
-  margin: -9px 425px;
-}
-
-
 
 .input-content #input-election-name {
   color: black;
@@ -73,8 +83,6 @@ legend {
 
 }
 
-
-
 .input-content #input-domain-address:focus {
   box-shadow: 0 0 3px #67049e;
 }
@@ -84,6 +92,7 @@ legend {
   color: black;
   margin: 10px 10px 10px;
   min-width: 30%;
+  width: 97%;
   max-width: 97%;
   border: 1px solid #67049e;
   margin-bottom: 30px;

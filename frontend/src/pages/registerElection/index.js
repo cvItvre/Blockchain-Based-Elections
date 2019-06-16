@@ -163,7 +163,7 @@ export default class RegisterElection extends Component {
 
     this.handleCandidates = (_candidates) => {
       if(_candidates === false) {
-        this.invalidFormat();
+        // this.invalidFormat();
       }
       this.setState({
         candidates: _candidates
@@ -182,8 +182,8 @@ export default class RegisterElection extends Component {
     return ( 
 
       <main className = "main-content" >
-        <h2> Cadastro de Eleição </h2> 
         <section className = "steps-content">
+        <h2>Cadastro de Eleição</h2> 
 
           <Messages ref={(el) => this.messages = el} />
           <Steps className = "steps-custom" model={items} activeIndex={this.state.activeIndex} onSelect={(e) => this.renderForm(e.index)} readOnly={false} />
