@@ -7,6 +7,8 @@ import { SelectButton } from 'primereact/selectbutton';
 import { Growl } from 'primereact/growl';
 import Chart from './chart';
 
+import SideBar from '../../components/sidebar';
+
 import './styles.css';
 
 class votar extends Component {
@@ -159,6 +161,7 @@ class votar extends Component {
 
     return (
       <main className="main-content">
+        <SideBar />
         <Growl
           ref={(el) => {
             this.growl = el;

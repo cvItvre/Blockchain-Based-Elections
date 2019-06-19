@@ -2,6 +2,8 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
+import { Link } from 'react-router-dom';
+
 import './styles.css';
 
 const button = (props) => {
@@ -9,9 +11,12 @@ const button = (props) => {
 
   return (
     <div className="button-sidebar-wrapper">
-      <a className="button-sidebar" href={url}>
+      <Link to={url} className="button-sidebar" >
         <img src={image} />
-      </a>
+      </ Link >
+      {/* <a className="b ar" href={url}>
+        <img src={image} />
+      </a> */}
       <strong>{description}</strong>
     </div>
   );

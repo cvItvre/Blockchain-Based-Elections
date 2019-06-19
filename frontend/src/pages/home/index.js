@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import SideBar from '../../components/sidebar';
+
 import { InputText } from 'primereact/inputtext';
 
 import ReactMinimalPieChart from 'react-minimal-pie-chart';
@@ -401,6 +403,7 @@ export default class Home extends Component {
     return (
 
       <div className="home-wrapper">
+        <SideBar />
         <span className="p-float-label">
           <InputText id="home-search-input" />
           <label className="lb-input" htmlFor="home-search-input">Search for Election</label>

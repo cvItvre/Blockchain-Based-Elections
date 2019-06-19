@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {Steps} from 'primereact/steps';
 import "./styles.css"
-import Formulario1 from '../Forms/Form';
-import ConfirmationForm from '../Forms/confirmationForm'
+import Formulario1 from './Form';
+import ConfirmationForm from './confirmationForm'
 import {Messages} from 'primereact/messages';
 import {Message} from 'primereact/message';
 import { Calendar } from 'primereact/calendar';
+
+import SideBar from '../../components/sidebar';
 
 export default class RegisterElection extends Component {
   
@@ -182,6 +184,8 @@ export default class RegisterElection extends Component {
     return ( 
 
       <main className = "main-content" >
+        <SideBar />
+
         <section className = "steps-content">
         <h2>Cadastro de Eleição</h2> 
 
