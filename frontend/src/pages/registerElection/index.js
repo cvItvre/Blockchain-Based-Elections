@@ -4,8 +4,6 @@ import "./styles.css"
 import Formulario1 from './Form';
 import ConfirmationForm from './confirmationForm'
 import {Messages} from 'primereact/messages';
-import {Message} from 'primereact/message';
-import { Calendar } from 'primereact/calendar';
 
 import SideBar from '../../components/sidebar';
 
@@ -21,7 +19,7 @@ export default class RegisterElection extends Component {
       domain: '',
       calendarBegin: '',
       calendarEnd: '',
-      candidates: []
+      candidates: [],
     };
 
     this.showSuccess = this.showSuccess.bind(this);
@@ -67,7 +65,6 @@ export default class RegisterElection extends Component {
   invalidFormat() {
     this.messages.show({severity: 'error', summary: 'Erro', detail: 'Formato de candidato inválido!'});
   }
-
   clear() {
       this.messages.clear();
   }
@@ -217,7 +214,6 @@ export default class RegisterElection extends Component {
           calendarBegin = {this.state.calendarBegin}
           calendarEnd = {this.state.calendarEnd}
           candidates = {this.state.candidates}
-          
           />
         }
 

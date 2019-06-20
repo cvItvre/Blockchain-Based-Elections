@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import moment from 'moment';
+import Web3 from 'web3';
+import {Messages} from 'primereact/messages';
 import './styles.css';
 
 
@@ -10,26 +13,75 @@ export default class ConfirmationForm extends Component {
         domain: this.props.domain,
         calendarBegin: this.props.calendarBegin,
         calendarEnd: this.props.calendarEnd,
-        candidates: this.props.candidates
+        candidates: this.props.candidates,
+        metamaskAddr: ""
       };
 
+      this.factoryJson = this.factoryJson.bind(this)
 
   }
 
-  confirmarCadastro () {
-    //TODO
+  factoryJson () {
+    const date1 = `${this.state.calendarBegin.getFullYear()}.${this.state.calendarBegin.getMonth()+1}.${this.state.calendarBegin.getDate()} ${this.state.calendarBegin.getHours()}:${this.state.calendarBegin.getMinutes()}:${this.state.calendarBegin.getSeconds()}`
+    const date2 = `${this.state.calendarEnd.getFullYear()}.${this.state.calendarEnd.getMonth()+1}.${this.state.calendarEnd.getDate()} ${this.state.calendarEnd.getHours()}:${this.state.calendarEnd.getMinutes()}:${this.state.calendarEnd.getSeconds()}`
+    const mom1 = moment(date1, 'YYYY.MM.DD HH:mm:ss').unix()
+    const mom2 = moment(date2, 'YYYY.MM.DD HH:mm:ss').unix()
+    return (
+      this.obj = {
+        ownerAddress: this.state.metamaskAddr,
+        election :{
+        name: this.state.electionName,
+        domain: '@'+this.state.domain,
+        opening: mom1,
+        closing: mom2
+      }
+    }
+    );
   }
+
 
 
 
 
   render() {
 
+    this.confirmarCadastro =  async () => {
+      const web3 = new Web3(Web3.givenProvider);
+      let currentAccount;
+      const onMetaMask = this.onMetamaskAddr;
+      const state = this.state;
+      const facJson = this.factoryJson;
+  
+      if(Web3.givenProvider === null) {
+        this.messages.show({
+          severity: 'info',
+          summary: 'Aviso',
+          detail: 'É preciso estar conectado ao metamask para prosseguir'
+        })
+      }else {
+        (async function getCurrentAccount(){
+          await Web3.givenProvider.enable()
+    
+          web3.eth.getAccounts((err, accounts) => { 
+            currentAccount = accounts
+            state.metamaskAddr = currentAccount[0];
+            console.log(JSON.stringify(facJson()))
+          })
+
+          
+        })()
+      }
+
+  
+    }
+
+
     const nomeEleicao = this.state.electionName;
     const dominio = this.state.domain === '' ? this.state.domain : '@'+this.state.domain;
     const calendarIni = this.state.calendarBegin;
     const calendarFim = this.state.calendarEnd;
     const candidatos = this.state.candidates;
+
 
     return(
 
@@ -63,6 +115,7 @@ export default class ConfirmationForm extends Component {
 
 
         <button className="bt-input-confirm" onClick={this.confirmarCadastro}>Cadastrar</button>
+        <Messages ref={(el) => this.messages = el} />
 
       </span>
 
