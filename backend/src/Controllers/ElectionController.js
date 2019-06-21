@@ -1,7 +1,7 @@
 const Web3 = require('web3');
 const contractAbi = require('../../contracts/ElectionsABI.json');
 
-const contractAddress = '0xf9Ef86eB38dd6a37CBC50A2F4CbF3004645D67A1';
+const contractAddress = '0xd1A2C51cFe22c94F73D6796D02404d94592630b7';
 const web3 = new Web3('http://127.0.0.1:7545');
 web3.eth.transactionConfirmationBlocks = 1;
 
@@ -31,7 +31,7 @@ const sendVote = async (req, res) => {
       from: ownerAddress,
     });
 
-    res.send();
+    res.json({ sucess: true });
   } catch (e) {
     res.status(500).send();
   }
@@ -53,6 +53,7 @@ const sendVote = async (req, res) => {
 const sendGiveRightToVote = async (req, res) => {
   try {
     const { ownerAddress, voter } = req.body;
+    console.log(ownerAddress, voter);
     const myContract = new web3.eth.Contract(contractAbi, contractAddress);
     const gas = await myContract.methods
       .giveRightToVote(voter.electionID, voter.email)
@@ -132,9 +133,11 @@ const sendCreateElection = async (req, res) => {
       .send({
         from: ownerAddress,
         gas,
+      })
+      .then(async () => { // vai funcionar mas corrigir pra algo mais seguro
+        const result = await myContract.methods.electionCount().call();
+        res.json({ electionID: result.toNumber() });
       });
-
-    res.send();
   } catch (e) {
     res.status(500).send();
   }

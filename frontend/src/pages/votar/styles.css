@@ -40,6 +40,7 @@
 }
 
 .input-content .lb-input {
+  position: absolute !important;
   color: #67049e;
   font-weight: bold;
 }
@@ -67,7 +68,7 @@
 }
 
 .domain-input-send {
-  margin: 0 5px;
+  margin: auto 5px;
   font-weight: bold;
 }
 
@@ -98,4 +99,8 @@
   height: 40px;
   font-weight: bold;
   transition: all 0.3s;
+}
+
+.chartjs-render-monitor {
+  position: relative !important;
 }

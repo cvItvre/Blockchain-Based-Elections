@@ -91,7 +91,7 @@ contract Elections {
     	string memory _emailDomain,
     	uint256 _openingTime,
     	uint256 _closingTime)
-    public onlyOwner {
+    public onlyOwner{
 
         electionCount ++;
         elections[electionCount]._electionID = electionCount;
@@ -102,7 +102,6 @@ contract Elections {
         elections[electionCount]._closingTime = _closingTime;
         elections[electionCount]._candidatesCount = 0;
         elections[electionCount]._votersCount = 0;
-
     }
 
     function addCandidates(

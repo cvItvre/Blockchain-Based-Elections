@@ -1,3 +1,7 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-await-in-loop */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
@@ -5,7 +9,9 @@ import React, { Component, Fragment } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { SelectButton } from 'primereact/selectbutton';
 import { Growl } from 'primereact/growl';
+import Web3 from 'web3';
 import Chart from './chart';
+import apiBlockchain from '../../services/apiBlockchain';
 
 import SideBar from '../../components/sidebar';
 
@@ -16,27 +22,8 @@ class votar extends Component {
     super(props);
     this.state = {
       data: {
-        canVote: false,
-        hasVoted: false,
-        electionID: 1,
-        electionName: 'Eleição 1',
-        domain: '@ufrpe.br',
-        labels: ['candidate1', 'candidate2', 'candidate3', 'candidate4'],
-        datasets: [
-          {
-            data: [100, 50, 300, 186],
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#AECB56'],
-            hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#AECB56'],
-          },
-        ],
-      },
-      candidateSelect: 1,
-      candidatesSelectItems: [
-        { label: 'candidate1', value: 1 },
-        { label: 'candidate2', value: 2 },
-        { label: 'candidate3', value: 3 },
-        { label: 'candidate4', value: 4 },
-      ],
+        electionName: null,
+      }
     };
 
     this.vote = this.vote.bind(this);
@@ -44,55 +31,178 @@ class votar extends Component {
     this.verifyCode = this.verifyCode.bind(this);
   }
 
-  sendEmail() {
-    const inputEmail = document.querySelector('#input-email');
-    // enviar email e id election para backend
-    const sucess = true;
-    if (sucess) {
-      // enviar email
-      // se tudo ok, recebe um código
-      this.growl.show({ severity: 'success', summary: 'Código de confirmação enviado para email' });
-    } else {
+  async componentDidMount() {
+    const { id } = this.props.match.params;
+    const election = await apiBlockchain.get(`/getElection/${id}`);
+    const { labels, candidatesSelectItems, colors, data } = await this.getCandidatesLabel(election.data.electionID, election.data.candidatesCount);
+
+    const dataState = {
+      canVote: false,
+      hasVoted: false,
+      electionID: election.data.electionID,
+      electionName: election.data.electionName,
+      domain: election.data.emailDomain,
+      labels,
+      datasets: [
+        {
+          data,
+          backgroundColor: colors,
+          hoverBackgroundColor: colors,
+        },
+      ],
+    };
+
+    this.setState({
+      data: dataState,
+      candidateSelect: 1,
+      candidatesSelectItems,
+    });
+  }
+
+  async getCandidatesLabel(electionID, candidateCount) {
+    const labels = [];
+    const candidatesSelectItems = [];
+    const colors = [];
+    const data = [];
+    
+    for (let i = 1; i <= candidateCount; i++) {
+      const candidate = await apiBlockchain.get(`/getCandidate/${electionID}/${i}`);
+      labels.push(candidate.data.name);
+      candidatesSelectItems.push({
+        label: candidate.data.name,
+        value: i,
+      });
+      colors.push(`#${Math.floor(Math.random() * 16777215).toString(16)}`);
+      data.push(candidate.data.voteCount);
+    }
+    return { labels, candidatesSelectItems, colors, data };
+  } 
+
+  async sendEmail() {
+    try {
+      const { data } = this.state;
+      const inputEmail = document.querySelector('#input-email');
+      const email = inputEmail.value;
+      // obtem dados eleicao
+      const election = await apiBlockchain.get(`/getElection/${ data.electionID }`);
+      const domain = election.data.emailDomain;
+
+      let dataPost = {
+        email,
+        domain,
+      };
+      // valida email
+      const validation = await apiBlockchain.post('/validationEmail', dataPost);
+      const { sucess } = validation.data;
+      if (sucess) {
+        dataPost = {
+          email,
+        };
+        // enviar email
+        await apiBlockchain.post('/sendEmail', dataPost);
+        localStorage.setItem('email', email);
+        // se tudo ok, recebe um código
+        this.growl.show({ severity: 'success', summary: 'Código de confirmação enviado para email' });
+      } else {
+        this.growl.show({ severity: 'error', summary: 'Email inválido' });
+      }
+    } catch (e) {
       this.growl.show({ severity: 'error', summary: 'Email inválido' });
     }
   }
 
-  verifyCode() {
-    const inputCode = document.querySelector('#input-code');
-    // envia codigo para backend
-    const sucess = true;
-    if (sucess) {
-      // checa se pode votar
-      // checa se já votou
-      this.setState((prevState) => {
-        const data = { ...prevState.data };
-        data.canVote = true;
-        data.hasVoted = false;
-        return { data };
-      });
-    } else {
+  async verifyCode() {
+    try {
+      const { data } = this.state;
+      const web3 = new Web3(Web3.givenProvider);
+
+      const inputCode = document.querySelector('#input-code');
+      const code = inputCode.value;
+      const email = localStorage.getItem('email');
+
+      let dataPost = {
+        code,
+        email,
+      };
+
+      if (Web3.givenProvider !== null) {
+        // envia codigo para backend
+        const validation = await apiBlockchain.post('/validationCode', dataPost);
+        const { sucess } = validation.data;
+        
+        if (sucess) {
+          await Web3.givenProvider.enable();
+          web3.eth.getAccounts(async (error, accounts) => {
+            // enviar id candidate e id election para backend
+            dataPost = {
+              ownerAddress: accounts[0],
+              voter: {
+                electionID: data.electionID,
+                email,
+              },
+            };
+
+            // envia requisicao de direito de voto
+            await apiBlockchain.post('/giveRightToVote', dataPost);
+            // checa se pode votar
+            const canVoteResult = await apiBlockchain.get(`/canVote/${data.electionID}/${email}`);
+            const { canVote } = canVoteResult.data;
+            // checa se já votou
+            const hasVotedResult = await apiBlockchain.get(`/hasVoted/${data.electionID}/${email}`);
+            const { hasVoted } = hasVotedResult.data;
+            console.log(canVote, hasVoted);
+            this.setState((prevState) => {
+              const newData = { ...prevState.data };
+              newData.canVote = canVote;
+              newData.hasVoted = hasVoted;
+              return { data: newData };
+            });
+          });
+        } else {
+          this.growl.show({ severity: 'error', summary: 'Código incorreto' });
+        }
+      } else {
+        this.growl.show({ severity: 'error', summary: 'É preciso estar conectado ao MetaMask para prosseguir' });
+      }
+    } catch (e) {
       this.growl.show({ severity: 'error', summary: 'Código incorreto' });
     }
   }
 
-  vote() {
-    const { candidateSelect, data } = this.state;
-    console.log(`id candidate: ${candidateSelect}`);
-    console.log(`id election: ${data.electionID}`);
+  async vote() {
+    try {
+      const { candidateSelect, data } = this.state;
+      const web3 = new Web3(Web3.givenProvider);
 
-    // enviar id candidate e id election para backend
-
-    const sucess = true;
-
-    if (sucess) {
-      this.growl.show({ severity: 'success', summary: 'Voto concluído' });
-      // checa se já votou
-      this.setState((prevState) => {
-        const newData = { ...prevState.data };
-        newData.hasVoted = true;
-        return { data: newData };
-      });
-    } else {
+      if (Web3.givenProvider !== null) {
+        await Web3.givenProvider.enable();
+        web3.eth.getAccounts(async (error, accounts) => {
+          // enviar id candidate e id election para backend
+          const dataPost = {
+            ownerAddress: accounts[0],
+            voteData: {
+              electionID: data.electionID,
+              candidateID: candidateSelect,
+            },
+          };
+          const validation = await apiBlockchain.post('/vote', dataPost);
+          const { sucess } = validation.data;
+          if (sucess) {
+            this.growl.show({ severity: 'success', summary: 'Voto concluído' });
+            // checa se já votou
+            this.setState((prevState) => {
+              const newData = { ...prevState.data };
+              newData.hasVoted = true;
+              return { data: newData };
+            });
+          } else {
+            this.growl.show({ severity: 'error', summary: 'Erro ao votar' });
+          }
+        });
+      } else {
+        this.growl.show({ severity: 'error', summary: 'É preciso estar conectado ao MetaMask para prosseguir' });
+      }
+    } catch (e) {
       this.growl.show({ severity: 'error', summary: 'Erro ao votar' });
     }
   }
