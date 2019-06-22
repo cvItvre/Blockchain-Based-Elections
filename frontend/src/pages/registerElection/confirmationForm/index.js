@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import Web3 from 'web3';
 import {Messages} from 'primereact/messages';
+import apiBlockchain from '../../../services/apiBlockchain';
 import './styles.css';
+import { isNumber } from 'util';
 
 
 export default class ConfirmationForm extends Component {
@@ -17,7 +19,9 @@ export default class ConfirmationForm extends Component {
         metamaskAddr: ""
       };
 
-      this.factoryJson = this.factoryJson.bind(this)
+      this.factoryJson = this.factoryJson.bind(this);
+      this.factoryJsonCandidate = this.factoryJsonCandidate.bind(this);
+
 
   }
 
@@ -28,7 +32,7 @@ export default class ConfirmationForm extends Component {
     const mom2 = moment(date2, 'YYYY.MM.DD HH:mm:ss').unix()
     return (
       this.obj = {
-        ownerAddress: this.state.metamaskAddr,
+        ownerAddress: '0XC0EAF9B295762121E91D72C15E695D5CF3CC43A2' || this.state.metamaskAddr,
         election :{
         name: this.state.electionName,
         domain: '@'+this.state.domain,
@@ -38,6 +42,33 @@ export default class ConfirmationForm extends Component {
     }
     );
   }
+
+  factoryJsonCandidate (candidateName, numberToVote, electionId) {
+    return (
+      this.obj = {
+        ownerAddress: '0XC0EAF9B295762121E91D72C15E695D5CF3CC43A2' || this.state.metamaskAddr,
+        candidate :{
+        electionID: electionId,
+        name: candidateName,
+        number: numberToVote
+      }
+    }
+    );
+  }
+
+  /*
+  Ex JSON:
+
+  {
+    "ownerAddress": "0x12D31fce5cb8640EcC171518eab723DDD0588Ce4",
+    "candidate": {
+      "electionID": 1,
+      "name": "Pedro Henrique",
+      "number": 30
+    }
+  }
+
+*/
 
 
 
@@ -51,6 +82,9 @@ export default class ConfirmationForm extends Component {
       const onMetaMask = this.onMetamaskAddr;
       const state = this.state;
       const facJson = this.factoryJson;
+      const cadastrarEleicao = this.cadastrarEleicao;
+
+      
   
       if(Web3.givenProvider === null) {
         this.messages.show({
@@ -65,16 +99,68 @@ export default class ConfirmationForm extends Component {
           web3.eth.getAccounts((err, accounts) => { 
             currentAccount = accounts
             state.metamaskAddr = currentAccount[0];
-            console.log(JSON.stringify(facJson()))
+            cadastrarEleicao(JSON.stringify(facJson()));
           })
 
           
         })()
       }
 
-  
     }
 
+
+    this.cadastrarEleicao = async jsonEleicao => {
+      const factoryCandidate = this.factoryJsonCandidate;
+      await apiBlockchain.post('/sendCreateElection', jsonEleicao).then(
+        response => {
+          const {electionID} = response.data;
+
+
+
+          const {candidates} = this.state;
+
+          candidates.map(string => {
+            
+            let name = null;
+            let number = null;
+
+            for(let i of string) {
+              if(i !== '(' && i !== ')' && i !== ' ' && !isNumber(i)) {
+                name += i;
+              }else if(isNumber(i)) {
+                number += i;
+              }
+            }
+
+            
+            this.cadastrarCandidatos(JSON.stringify(factoryCandidate(name, number, electionID)));
+            
+          })
+
+          this.growl.show({ severity: 'success', summary: 'Eleicao cadastrada com sucesso!' });
+
+
+        }).catch(error => {
+          if(!error.response) {
+            this.messages.show({
+              severity: 'info',
+              summary: 'Erro',
+              detail: 'Não foi possível acessar o servidor, tente novamente mais tarde.'
+            })
+        }else {
+          this.messages.show({
+            severity: 'info',
+            summary: 'Erro',
+            detail: 'Não foi possível cadastrar a eleição verifique se os dados estão corretos.'
+          })
+        }
+      })
+
+    }
+
+    this.cadastrarCandidatos = async (json) => {
+      const status = await apiBlockchain.post('/sendAddCandidate', json);
+    }
 
     const nomeEleicao = this.state.electionName;
     const dominio = this.state.domain === '' ? this.state.domain : '@'+this.state.domain;

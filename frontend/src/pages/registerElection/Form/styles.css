@@ -31,6 +31,25 @@ legend {
   font-weight: bold;
 }
 
+.input-content .election-name-wrapper .lb-input {
+   /* background: #00ff00; */
+  position: relative;
+  top: 30px;
+  color: #67049e;
+  font-weight: bold;
+  margin-left: 12px;
+}
+
+
+.input-content .candidates-input-wrapper .lb-input {
+  /* background: #00ff00; */
+ position: relative;
+ top: 200px;
+ color: #67049e;
+ font-weight: bold;
+ margin-left: 12px;
+}
+
 .input-content .p-float-label .p-float-label-input {
   position: relative;
   /* background: #00ff00; */
