@@ -8,7 +8,7 @@ import {Messages} from 'primereact/messages';
 import SideBar from '../../components/sidebar';
 
 export default class RegisterElection extends Component {
-  
+
 
 
   constructor(props) {
@@ -80,7 +80,7 @@ export default class RegisterElection extends Component {
       console.log(this.state.electionName.length, this.state.domain.length, this.state.calendarBegin.toString(), this.state.calendarEnd.toString().length,
       this.state.candidates.length);
 
-      if(this.state.electionName.length > 0 && this.state.domain.length > 0 && this.state.calendarBegin.toString().length > 0 
+      if(this.state.electionName.length > 0 && this.state.domain.length > 0 && this.state.calendarBegin.toString().length > 0
       && this.state.calendarEnd.toString().length > 0 && this.state.candidates.length > 0) {
         bool = true;
       }
@@ -126,13 +126,13 @@ export default class RegisterElection extends Component {
       }else {
         this.setState({activeIndex: _value});
       }
-  
-  
+
+
     }
-  
+
     this.handleElectionName = (_name) => {
 
-      
+
       this.setState({
         electionName: _name
       });
@@ -178,21 +178,21 @@ export default class RegisterElection extends Component {
       }
     ];
 
-    return ( 
+    return (
 
       <main className = "main-content" >
         <SideBar />
 
         <section className = "steps-content">
-        <h2>Cadastro de Eleição</h2> 
+          <h2>Cadastro de Eleição</h2>
 
           <Messages ref={(el) => this.messages = el} />
           <Steps className = "steps-custom" model={items} activeIndex={this.state.activeIndex} onSelect={(e) => this.renderForm(e.index)} readOnly={false} />
-      
 
-        {
-          this.state.activeIndex === 0 && 
-          < Formulario1 
+
+          {
+          this.state.activeIndex === 0 &&
+          < Formulario1
             onElectionName = {this.handleElectionName}
             onDomainName = {this.handleDomainName}
             onCalendarBeginChange = {this.handleCalendarBegin}
@@ -203,12 +203,12 @@ export default class RegisterElection extends Component {
             calendarBegin = {this.state.calendarBegin}
             calendarEnd = {this.state.calendarEnd}
             candidates = {this.state.candidates}
-            />  
+            />
         }
 
-        {
-          this.state.activeIndex === 1 && 
-          < ConfirmationForm 
+          {
+          this.state.activeIndex === 1 &&
+          < ConfirmationForm
           electionName = {this.state.electionName}
           domain = {this.state.domain}
           calendarBegin = {this.state.calendarBegin}
@@ -217,7 +217,7 @@ export default class RegisterElection extends Component {
           />
         }
 
-        { console.log(this.state.domain)}
+          { console.log(this.state.domain)}
         </section>
       </main>
 

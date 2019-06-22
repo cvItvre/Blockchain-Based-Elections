@@ -29,30 +29,30 @@ export default class ConfirmationForm extends Component {
     const date2 = `${this.state.calendarEnd.getFullYear()}.${this.state.calendarEnd.getMonth()+1}.${this.state.calendarEnd.getDate()} ${this.state.calendarEnd.getHours()}:${this.state.calendarEnd.getMinutes()}:${this.state.calendarEnd.getSeconds()}`
     const mom1 = moment(date1, 'YYYY.MM.DD HH:mm:ss').unix()
     const mom2 = moment(date2, 'YYYY.MM.DD HH:mm:ss').unix()
-    return (
-      this.obj = {
-        ownerAddress: '0XC0EAF9B295762121E91D72C15E695D5CF3CC43A2' || this.state.metamaskAddr,
-        election :{
-        name: this.state.electionName,
-        domain: '@'+this.state.domain,
-        opening: mom1,
-        closing: mom2
+    const obj = {
+      ownerAddress: this.state.metamaskAddr,
+      election :{
+      name: this.state.electionName,
+      domain: '@'+this.state.domain,
+      opening: mom1,
+      closing: mom2
       }
     }
-    );
+
+    return obj;
   }
 
   factoryJsonCandidate (candidateName, numberToVote, electionId) {
-    return (
-      this.obj = {
-        ownerAddress: '0XC0EAF9B295762121E91D72C15E695D5CF3CC43A2' || this.state.metamaskAddr,
-        candidate :{
+    const obj = {
+      ownerAddress: this.state.metamaskAddr,
+      candidate: {
         electionID: electionId,
         name: candidateName,
-        number: numberToVote
-      }
-    }
-    );
+        number: numberToVote,
+      },
+    };
+    console.log(obj);
+    return obj;
   }
 
   /*
@@ -83,8 +83,8 @@ export default class ConfirmationForm extends Component {
       const facJson = this.factoryJson;
       const cadastrarEleicao = this.cadastrarEleicao;
 
-      
-  
+
+
       if(Web3.givenProvider === null) {
         this.messages.show({
           severity: 'info',
@@ -94,14 +94,14 @@ export default class ConfirmationForm extends Component {
       }else {
         (async function getCurrentAccount(){
           await Web3.givenProvider.enable()
-    
-          web3.eth.getAccounts((err, accounts) => { 
+
+          web3.eth.getAccounts((err, accounts) => {
             currentAccount = accounts
             state.metamaskAddr = currentAccount[0];
-            cadastrarEleicao(JSON.stringify(facJson()));
+            cadastrarEleicao(facJson());
           })
 
-          
+
         })()
       }
 
@@ -110,31 +110,32 @@ export default class ConfirmationForm extends Component {
 
     this.cadastrarEleicao = async jsonEleicao => {
       const factoryCandidate = this.factoryJsonCandidate;
-      await apiBlockchain.post('/sendCreateElection', jsonEleicao).then(
+      await apiBlockchain.post('/createElection', jsonEleicao).then(
         response => {
           const {electionID} = response.data;
-
-
-
           const {candidates} = this.state;
 
           candidates.map(string => {
-            
-            let name = null;
-            let number = null;
 
-            for(let i of string) {
-              if(i !== '(' && i !== ')' && i !== ' ' && !this.isNumber(i)) {
-                name += i;
-              }else if(this.isNumber(i)) {
-                number += i;
-              }
-            }
+            // let name = '';
+            // let number = null;
 
-            number = parseInt(number, 10);
+            // for(let i of string) {
+            //   if(i !== '(' && i !== ')' && i !== ' ' && !this.isNumber(i)) {
+            //     name += i;
+            //   }else if(this.isNumber(i)) {
+            //     number = i;
+            //   }
+            // }
 
-            this.cadastrarCandidatos(JSON.stringify(factoryCandidate(name, number, electionID)));
-            
+            // number = parseInt(number, 10);
+
+            const match = (/^(.+?)\((\d+)\)$/gi).exec(string);
+            const name = match[1].trim();
+            const number = parseInt(match[2], 10);
+            console.log(name, number);
+            this.cadastrarCandidatos(factoryCandidate(name, number, electionID));
+
           })
 
           this.growl.show({ severity: 'success', summary: 'Eleicao cadastrada com sucesso!' });
@@ -171,7 +172,7 @@ export default class ConfirmationForm extends Component {
     }
 
     this.cadastrarCandidatos = async (json) => {
-      const status = await apiBlockchain.post('/sendAddCandidate', json);
+      const status = await apiBlockchain.post('/addCandidate', json);
     }
 
     const nomeEleicao = this.state.electionName;
@@ -190,18 +191,18 @@ export default class ConfirmationForm extends Component {
         <h2>{nomeEleicao}</h2>
         {/* {console.log(nomeEleicao)} */}
         <br/>
-        
-        <h1>Domínio</h1> 
+
+        <h1>Domínio</h1>
         <h2>{dominio}</h2>
         {/* {console.log(dominio)} */}
         <br/>
 
-        <h1>Data e Hora de início</h1> 
+        <h1>Data e Hora de início</h1>
         <h2>{calendarIni.toString()}</h2>
         {/* {console.log(calendarIni)} */}
         <br/>
 
-        <h1>Data e Hora de fim</h1> 
+        <h1>Data e Hora de fim</h1>
         <h2>{calendarFim.toString()}</h2>
         {/* {console.log(calendarFim)} */}
         <br/>

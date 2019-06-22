@@ -53,7 +53,6 @@ const sendVote = async (req, res) => {
 const sendGiveRightToVote = async (req, res) => {
   try {
     const { ownerAddress, voter } = req.body;
-    console.log(ownerAddress, voter);
     const myContract = new web3.eth.Contract(contractAbi, contractAddress);
     const gas = await myContract.methods
       .giveRightToVote(voter.electionID, voter.email)

@@ -64,7 +64,7 @@ class votar extends Component {
     const candidatesSelectItems = [];
     const colors = [];
     const data = [];
-    
+
     for (let i = 1; i <= candidateCount; i++) {
       const candidate = await apiBlockchain.get(`/getCandidate/${electionID}/${i}`);
       labels.push(candidate.data.name);
@@ -76,7 +76,7 @@ class votar extends Component {
       data.push(candidate.data.voteCount);
     }
     return { labels, candidatesSelectItems, colors, data };
-  } 
+  }
 
   async sendEmail() {
     try {
@@ -99,10 +99,13 @@ class votar extends Component {
           email,
         };
         // enviar email
-        await apiBlockchain.post('/sendEmail', dataPost);
-        localStorage.setItem('email', email);
-        // se tudo ok, recebe um código
-        this.growl.show({ severity: 'success', summary: 'Código de confirmação enviado para email' });
+        await apiBlockchain.post('/sendEmail', dataPost).then(async () => {
+          localStorage.setItem('email', email);
+          // se tudo ok, recebe um código
+          this.growl.show({ severity: 'success', summary: 'Código de confirmação enviado para email' });
+        }).catch(() => {
+          this.growl.show({ severity: 'error', summary: 'Email inexistente' });
+        });
       } else {
         this.growl.show({ severity: 'error', summary: 'Email inválido' });
       }
@@ -129,7 +132,7 @@ class votar extends Component {
         // envia codigo para backend
         const validation = await apiBlockchain.post('/validationCode', dataPost);
         const { sucess } = validation.data;
-        
+
         if (sucess) {
           await Web3.givenProvider.enable();
           web3.eth.getAccounts(async (error, accounts) => {
@@ -143,19 +146,22 @@ class votar extends Component {
             };
 
             // envia requisicao de direito de voto
-            await apiBlockchain.post('/giveRightToVote', dataPost);
-            // checa se pode votar
-            const canVoteResult = await apiBlockchain.get(`/canVote/${data.electionID}/${email}`);
-            const { canVote } = canVoteResult.data;
-            // checa se já votou
-            const hasVotedResult = await apiBlockchain.get(`/hasVoted/${data.electionID}/${email}`);
-            const { hasVoted } = hasVotedResult.data;
-            console.log(canVote, hasVoted);
-            this.setState((prevState) => {
-              const newData = { ...prevState.data };
-              newData.canVote = canVote;
-              newData.hasVoted = hasVoted;
-              return { data: newData };
+            await apiBlockchain.post('/giveRightToVote', dataPost).then(async () => {
+              // checa se pode votar
+              const canVoteResult = await apiBlockchain.get(`/canVote/${data.electionID}/${email}`);
+              const { canVote } = canVoteResult.data;
+              // checa se já votou
+              const hasVotedResult = await apiBlockchain.get(`/hasVoted/${data.electionID}/${email}`);
+              const { hasVoted } = hasVotedResult.data;
+
+              this.setState((prevState) => {
+                const newData = { ...prevState.data };
+                newData.canVote = canVote;
+                newData.hasVoted = hasVoted;
+                return { data: newData };
+              });
+            }).catch(() => {
+              this.growl.show({ severity: 'info', summary: 'Você já votou' });
             });
           });
         } else {
@@ -185,19 +191,22 @@ class votar extends Component {
               candidateID: candidateSelect,
             },
           };
-          const validation = await apiBlockchain.post('/vote', dataPost);
-          const { sucess } = validation.data;
-          if (sucess) {
-            this.growl.show({ severity: 'success', summary: 'Voto concluído' });
-            // checa se já votou
-            this.setState((prevState) => {
-              const newData = { ...prevState.data };
-              newData.hasVoted = true;
-              return { data: newData };
-            });
-          } else {
-            this.growl.show({ severity: 'error', summary: 'Erro ao votar' });
-          }
+
+          await apiBlockchain.post('/vote', dataPost).then((response) => {
+            const { sucess } = response.data;
+
+            if (sucess) {
+              this.growl.show({ severity: 'success', summary: 'Voto concluído' });
+              // checa se já votou
+              this.setState((prevState) => {
+                const newData = { ...prevState.data };
+                newData.hasVoted = true;
+                return { data: newData };
+              });
+            }
+          }).catch(() => {
+            this.growl.show({ severity: 'info', summary: 'Votação não iniciada' });
+          });
         });
       } else {
         this.growl.show({ severity: 'error', summary: 'É preciso estar conectado ao MetaMask para prosseguir' });
