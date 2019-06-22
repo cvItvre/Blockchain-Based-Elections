@@ -4,7 +4,6 @@ import Web3 from 'web3';
 import {Messages} from 'primereact/messages';
 import apiBlockchain from '../../../services/apiBlockchain';
 import './styles.css';
-import { isNumber } from 'util';
 
 
 export default class ConfirmationForm extends Component {
@@ -125,14 +124,15 @@ export default class ConfirmationForm extends Component {
             let number = null;
 
             for(let i of string) {
-              if(i !== '(' && i !== ')' && i !== ' ' && !isNumber(i)) {
+              if(i !== '(' && i !== ')' && i !== ' ' && !this.isNumber(i)) {
                 name += i;
-              }else if(isNumber(i)) {
+              }else if(this.isNumber(i)) {
                 number += i;
               }
             }
 
-            
+            number = parseInt(number, 10);
+                        
             this.cadastrarCandidatos(JSON.stringify(factoryCandidate(name, number, electionID)));
             
           })
@@ -156,6 +156,18 @@ export default class ConfirmationForm extends Component {
         }
       })
 
+    }
+
+    this.isNumber = (num) => { //deve ter alguma função primitiva pra isso, mas como eu to sem paciencia vai assim mesmo.
+      bool = false;
+      for(let i = 0; i < 10; i++) {
+        if(num == i) { // sim a comparação deve ser feita com '==';
+          bool = true;
+          break;
+        }
+      }
+
+      return bool;
     }
 
     this.cadastrarCandidatos = async (json) => {
