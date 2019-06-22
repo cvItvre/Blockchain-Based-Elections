@@ -132,7 +132,7 @@ export default class ConfirmationForm extends Component {
             }
 
             number = parseInt(number, 10);
-                        
+
             this.cadastrarCandidatos(JSON.stringify(factoryCandidate(name, number, electionID)));
             
           })
@@ -159,7 +159,7 @@ export default class ConfirmationForm extends Component {
     }
 
     this.isNumber = (num) => { //deve ter alguma função primitiva pra isso, mas como eu to sem paciencia vai assim mesmo.
-      bool = false;
+      let bool = false;
       for(let i = 0; i < 10; i++) {
         if(num == i) { // sim a comparação deve ser feita com '==';
           bool = true;
