@@ -1,7 +1,14 @@
 const Web3 = require('web3');
 const contractAbi = require('../../contracts/ElectionsABI.json');
 
-const contractAddress = '0xd1A2C51cFe22c94F73D6796D02404d94592630b7';
+let contractAddress = '0x6E5938449cedE008886E6F08ECBdC639f6477e2B';
+
+// Set contract address from CLI argument
+if (process.argv[2] !== undefined) {
+  contractAddress = process.argv[2];
+  console.log(contractAddress);
+}
+
 const web3 = new Web3('http://127.0.0.1:7545');
 web3.eth.transactionConfirmationBlocks = 1;
 
@@ -133,7 +140,8 @@ const sendCreateElection = async (req, res) => {
         from: ownerAddress,
         gas,
       })
-      .then(async () => { // vai funcionar mas corrigir pra algo mais seguro
+      .then(async () => {
+        // vai funcionar mas corrigir pra algo mais seguro
         const result = await myContract.methods.electionCount().call();
         res.json({ electionID: result.toNumber() });
       });
@@ -148,17 +156,23 @@ const sendCreateElection = async (req, res) => {
 
 const getCountElections = async (req, res) => {
   try {
-    const myContract = new web3.eth.Contract(contractAbi, contractAddress);
-    const result = await myContract.methods.electionCount().call();
+    const numberOfElections = await getCountElectionsUtil();
 
     const resultJSON = {
-      countElection: result.toNumber(),
+      countElection: numberOfElections,
     };
 
     res.json(resultJSON);
   } catch (e) {
     res.status(500).send();
   }
+};
+
+const getCountElectionsUtil = async () => {
+  const myContract = new web3.eth.Contract(contractAbi, contractAddress);
+  const result = await myContract.methods.electionCount().call();
+
+  return result.toNumber();
 };
 
 /*
@@ -189,17 +203,47 @@ const getCandidate = async (req, res) => {
   try {
     const electionID = req.params.idElection;
     const candidateID = req.params.idCandidate;
-    const myContract = new web3.eth.Contract(contractAbi, contractAddress);
-    const result = await myContract.methods.getCandidate(electionID, candidateID).call();
 
-    const candidateData = {};
-
-    candidateData.id = result['0'].toNumber();
-    candidateData.name = result['1'];
-    candidateData.number = result['2'].toNumber();
-    candidateData.voteCount = result['3'].toNumber();
+    const candidateData = await getCandidateUtil(electionID, candidateID);
 
     res.json(candidateData);
+  } catch (e) {
+    res.status(500).send();
+  }
+};
+
+const getCandidateUtil = async (electionID, candidateID) => {
+  const myContract = new web3.eth.Contract(contractAbi, contractAddress);
+  const result = await myContract.methods.getCandidate(electionID, candidateID).call();
+
+  const candidateData = {
+    id: result['0'].toNumber(),
+    name: result['1'],
+    number: result['2'].toNumber(),
+    voteCount: result['3'].toNumber(),
+  };
+
+  return candidateData;
+};
+
+/*
+  Ex: http://localhost:3001/api/getCandidates/1
+*/
+const getCandidatesList = async (req, res) => {
+  try {
+    const electionID = req.params.idElection;
+
+    const electionData = await getElectionsUtil(electionID);
+    const numberOfCandidates = electionData._candidatesCount;
+
+    const candidates = [];
+
+    for (let index = 0; index < numberOfCandidates; index++) {
+      const candidateData = await getCandidateUtil(electionID, index);
+      candidates.push(candidateData);
+    }
+
+    res.json(candidates);
   } catch (e) {
     res.status(500).send();
   }
@@ -231,21 +275,48 @@ const getContractOwner = async (req, res) => {
 const getElections = async (req, res) => {
   try {
     const electionID = req.params.id;
-    const myContract = new web3.eth.Contract(contractAbi, contractAddress);
-    const result = await myContract.methods.elections(electionID).call();
-
-    const electionData = {};
-
-    electionData.electionID = result._electionID.toNumber();
-    electionData.electionAdmin = result._electionAdmin;
-    electionData.electionName = result._electionName;
-    electionData.emailDomain = result._emailDomain;
-    electionData.openingTime = result._openingTime.toNumber();
-    electionData.closingTime = result._closingTime.toNumber();
-    electionData.candidatesCount = result._candidatesCount.toNumber();
-    electionData.votersCount = result._votersCount.toNumber();
+    const electionData = await getElectionsUtil(electionID);
 
     res.json(electionData);
+  } catch (e) {
+    res.status(500).send();
+  }
+};
+
+const getElectionsUtil = async (id) => {
+  const myContract = new web3.eth.Contract(contractAbi, contractAddress);
+  const result = await myContract.methods.elections(electionID).call();
+
+  const electionData = {
+    electionID: result._electionID.toNumber(),
+    electionAdmin: result._electionAdmin,
+    electionName: result._electionName,
+    emailDomain: result._emailDomain,
+    openingTime: result._openingTime.toNumber(),
+    closingTime: result._closingTime.toNumber(),
+    candidatesCount: result._candidatesCount.toNumber(),
+    votersCount: result._votersCount.toNumber(),
+  };
+
+  return electionData;
+};
+
+/*
+  Ex: http://localhost:3001/api/getElection
+*/
+
+const getElectionsList = async (req, res) => {
+  try {
+    const numberOfElections = await getCountElectionsUtil();
+    const elections = [];
+
+    for (let index = 0; index < numberOfElections; index++) {
+      const electionData = await getElectionsUtil(index);
+
+      elections.push(electionData);
+    }
+
+    res.json(elections);
   } catch (e) {
     res.status(500).send();
   }
@@ -297,8 +368,10 @@ module.exports = {
   getCountElections,
   getWinner,
   getCandidate,
+  getCandidatesList,
   getContractOwner,
   getElections,
+  getElectionsList,
   sendCreateElection,
   sendAddCandidate,
   sendGiveRightToVote,

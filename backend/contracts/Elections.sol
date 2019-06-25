@@ -61,7 +61,7 @@ contract Elections {
     }
 
     function getCandidate(uint256 _electionID, uint256 _candidateID)
-        public view returns(uint256, string memory, uint256, uint256) {
+        public view returnmethods.winner(electionID).call();s(uint256, string memory, uint256, uint256) {
 
         Candidate memory candidate = elections[_electionID]._candidates[_candidateID];
 
@@ -87,7 +87,7 @@ contract Elections {
       }
 
     function createElection(
-        string memory _electionName,
+      string memory _electionName,
     	string memory _emailDomain,
     	uint256 _openingTime,
     	uint256 _closingTime)

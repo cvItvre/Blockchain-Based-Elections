@@ -5,7 +5,12 @@ const contractCode = require('../contracts/ElectionsBytecode.json').object;
 const web3 = new Web3('http://127.0.0.1:7545');
 web3.eth.transactionConfirmationBlocks = 1;
 
-const ownerAddress = '0x4024f25a3BAfbc06db3f0d2cd5B09be2dFD68325'; // mudar para um endereço valido do ganache
+// const ownerAddress = '0x8274C99Bc6B51E0440C81576EC1d65971d7dd0d5'; // mudar para um endereço valido do ganache
+
+/*
+ * Ex.: node deployContract.js 0x8274C99Bc6B51E0440C81576EC1d65971d7dd0d5
+ */
+const ownerAddress = process.argv[2]; // passado como argumento na CLI
 
 const MyContract = new web3.eth.Contract(contractAbi);
 

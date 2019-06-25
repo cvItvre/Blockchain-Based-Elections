@@ -27,6 +27,9 @@ export default class Home extends Component {
   }
   
   fetchAllElections() {
+
+
+    
     this.loadElections();
   }
 
@@ -56,7 +59,7 @@ export default class Home extends Component {
     let index = pageNumber * NUMBER_OF_ELECTIONS_PER_PAGE;
     let indexEnd = index + 4;
 
-    for( ;index < indexEnd; index++ ) {
+    for( ;index < indexEnd && index < elections.length; index++ ) {
       nextPageElections.push(elections[index]);
     }
 
@@ -391,6 +394,8 @@ export default class Home extends Component {
     nextPageElections.push(elections[6]);
     nextPageElections.push(elections[7]);
 
+    console.log(elections.length);
+
     this.setState({
       actualPageElections,
       nextPageElections
@@ -412,35 +417,37 @@ export default class Home extends Component {
           </button>
         </span>
         <section className="home-content">
-          {actualPageElections.map(election => (
-            <section key={election.id} className="election-description">
-              <strong>{election.electionName} - {election.id}</strong>
-              <ReactMinimalPieChart
-                data={election.data}
-                style={{
-                  width: '40%',
-                  height: '50%',
-                  marginLeft: '5%',
-                }}
-                animate
-                lineWidth={40}
-              />
-              <ul>
-                <li>
-                  <div style={{ background: election.data[0].color }} />
-                  {election.data[0].title}
-                </li>
-                <li>
-                  <div style={{ background: election.data[1].color }} />
-                  {election.data[1].title}
-                </li>
-                <li>
-                  <div style={{ background: election.data[2].color }} />
-                  {election.data[2].title}
-                </li>
-              </ul>
-            </section>
-          ))}
+          {
+            actualPageElections.map(election => (
+              <section key={election.id} className="election-description">
+                <strong>{election.electionName} - {election.id}</strong>
+                <ReactMinimalPieChart
+                  data={election.data}
+                  style={{
+                    width: '40%',
+                    height: '50%',
+                    marginLeft: '5%',
+                  }}
+                  animate
+                  lineWidth={40}
+                />
+                <ul>
+                  <li>
+                    <div style={{ background: election.data[0].color }} />
+                    {election.data[0].title}
+                  </li>
+                  <li>
+                    <div style={{ background: election.data[1].color }} />
+                    {election.data[1].title}
+                  </li>
+                  <li>
+                    <div style={{ background: election.data[2].color }} />
+                    {election.data[2].title}
+                  </li>
+                </ul>
+              </section>
+            ))
+          }
         </section>
         <section className="home-navigation">
           <button className="bt-input-send" onClick={this.previousElections}>
