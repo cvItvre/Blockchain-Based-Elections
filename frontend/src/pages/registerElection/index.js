@@ -77,9 +77,6 @@ export default class RegisterElection extends Component {
     this.nonEmptyValues = () => {
       let bool = false;
 
-      console.log(this.state.electionName.length, this.state.domain.length, this.state.calendarBegin.toString(), this.state.calendarEnd.toString().length,
-      this.state.candidates.length);
-
       if(this.state.electionName.length > 0 && this.state.domain.length > 0 && this.state.calendarBegin.toString().length > 0
       && this.state.calendarEnd.toString().length > 0 && this.state.candidates.length > 0) {
         bool = true;
@@ -136,28 +133,24 @@ export default class RegisterElection extends Component {
       this.setState({
         electionName: _name
       });
-      console.log("Election " + this.state.electionName)
     }
 
     this.handleDomainName = (_domain) => {
       this.setState({
         domain: _domain
       });
-      console.log("domain " + this.state.domain)
     }
 
     this.handleCalendarBegin = (_calendarBegin) => {
       this.setState({
         calendarBegin: _calendarBegin
       });
-      console.log("calendarBegin " + this.state.calendarBegin)
     }
 
     this.handleCalendarEnd = (_calendarEnd) => {
       this.setState({
         calendarEnd: _calendarEnd
       });
-      console.log("calendarEnd " + this.state.calendarEnd)
     }
 
     this.handleCandidates = (_candidates) => {
@@ -167,7 +160,6 @@ export default class RegisterElection extends Component {
       this.setState({
         candidates: _candidates
       });
-      console.log("Candidates " + this.state.candidates)
     }
 
     const items = [{
@@ -181,9 +173,8 @@ export default class RegisterElection extends Component {
     return (
 
       <main className = "main-content" >
-        <SideBar />
-
         <section className = "steps-content">
+          <SideBar />
           <h2>Cadastro de Eleição</h2>
 
           <Messages ref={(el) => this.messages = el} />
@@ -216,8 +207,6 @@ export default class RegisterElection extends Component {
           candidates = {this.state.candidates}
           />
         }
-
-          { console.log(this.state.domain)}
         </section>
       </main>
 

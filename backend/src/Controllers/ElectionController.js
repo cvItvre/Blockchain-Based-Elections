@@ -1,7 +1,7 @@
 const Web3 = require('web3');
 const contractAbi = require('../../contracts/ElectionsABI.json');
 
-let contractAddress = '0x6E5938449cedE008886E6F08ECBdC639f6477e2B';
+let contractAddress = '0xd1A2C51cFe22c94F73D6796D02404d94592630b7';
 
 // Set contract address from CLI argument
 if (process.argv[2] !== undefined) {
@@ -285,7 +285,7 @@ const getElections = async (req, res) => {
 
 const getElectionsUtil = async (id) => {
   const myContract = new web3.eth.Contract(contractAbi, contractAddress);
-  const result = await myContract.methods.elections(electionID).call();
+  const result = await myContract.methods.elections(id).call();
 
   const electionData = {
     electionID: result._electionID.toNumber(),

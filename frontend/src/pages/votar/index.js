@@ -21,9 +21,10 @@ class votar extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showChart: false,
       data: {
         electionName: null,
-      }
+      },
     };
 
     this.vote = this.vote.bind(this);
@@ -42,6 +43,8 @@ class votar extends Component {
       electionID: election.data.electionID,
       electionName: election.data.electionName,
       domain: election.data.emailDomain,
+      openingTime: election.data.openingTime,
+      closingTime: election.data.closingTime,
       labels,
       datasets: [
         {
@@ -56,6 +59,7 @@ class votar extends Component {
       data: dataState,
       candidateSelect: 1,
       candidatesSelectItems,
+      showChart: true,
     });
   }
 
@@ -80,6 +84,7 @@ class votar extends Component {
 
   async sendEmail() {
     try {
+      this.growl.show({ severity: 'info', summary: 'Verificando email...' });
       const { data } = this.state;
       const inputEmail = document.querySelector('#input-email');
       const email = inputEmail.value;
@@ -97,6 +102,7 @@ class votar extends Component {
       if (sucess) {
         dataPost = {
           email,
+          electionName: data.electionName,
         };
         // enviar email
         await apiBlockchain.post('/sendEmail', dataPost).then(async () => {
@@ -109,18 +115,20 @@ class votar extends Component {
       } else {
         this.growl.show({ severity: 'error', summary: 'Email inválido' });
       }
-    } catch (e) {
-      this.growl.show({ severity: 'error', summary: 'Email inválido' });
+
+    } catch (error) {
+      this.growl.show({ severity: 'error', summary: 'Ocorreu um erro ao enviar o email!' });
     }
   }
 
   async verifyCode() {
     try {
+      this.growl.show({ severity: 'info', summary: 'Verificando código...' });
       const { data } = this.state;
       const web3 = new Web3(Web3.givenProvider);
 
       const inputCode = document.querySelector('#input-code');
-      const code = inputCode.value;
+      const code = inputCode.value.toLowerCase();
       const email = localStorage.getItem('email');
 
       let dataPost = {
@@ -170,7 +178,7 @@ class votar extends Component {
       } else {
         this.growl.show({ severity: 'error', summary: 'É preciso estar conectado ao MetaMask para prosseguir' });
       }
-    } catch (e) {
+    } catch (error) {
       this.growl.show({ severity: 'error', summary: 'Código incorreto' });
     }
   }
@@ -276,7 +284,7 @@ class votar extends Component {
 
   render() {
     // dados estaticos
-    const { data } = this.state;
+    const { data, showChart } = this.state;
 
     return (
       <main className="main-content">
@@ -287,7 +295,7 @@ class votar extends Component {
           }}
         />
         <h1>{data.electionName}</h1>
-        <Chart data={data} />
+        {showChart ? <Chart data={data} /> : <b>teste</b>}
 
         {data.canVote ? this.componentVoteCandidate() : this.componentValidationEmail()}
       </main>

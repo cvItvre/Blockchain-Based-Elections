@@ -3,7 +3,7 @@ import {BrowserRouter, Switch, Route} from "react-router-dom"
 
 import RegisterElection from './pages/registerElection';
 import Votar from './pages/votar';
-import Home from './pages/home'; 
+import Home from './pages/home';
 
 
 const routes = () => (
@@ -12,8 +12,8 @@ const routes = () => (
     <Switch>
       <Route exact path="/" component={Home} />
       <Route exact path="/registerelection" component={RegisterElection} />
-      <Route exact path="/votar/:id" component={Votar} />
-    </Switch>    
+      <Route exact path="/vote/:id" component={Votar} />
+    </Switch>
   </BrowserRouter>
 
 );

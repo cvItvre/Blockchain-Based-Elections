@@ -53,6 +53,7 @@
   height: 40px;
   font-weight: bold;
   transition: all 0.3s;
+  cursor: pointer;
 }
 
 .bt-input-code {
@@ -65,6 +66,7 @@
   height: 35px;
   font-weight: bold;
   transition: all 0.3s;
+  cursor: pointer;
 }
 
 .domain-input-send {
@@ -103,4 +105,9 @@
 
 .chartjs-render-monitor {
   position: relative !important;
+}
+
+.stopwatch {
+  color: #540381;
+  margin-top: 15px;
 }

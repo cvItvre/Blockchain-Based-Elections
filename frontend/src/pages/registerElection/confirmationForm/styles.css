@@ -32,26 +32,23 @@
 }
 
 .bt-input-confirm {
+  font-size: 18px;
   background: #f3f3f3;
   border: 1px solid #089e00;
   border-radius: 10px;
-  position: absolute;
-  margin: auto;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  margin-top: 80px;
   width: 400px;
   height: 40px;
   font-weight: bold;
   transition: all 0.3s;
   cursor: pointer;
-
 }
-
-
 
 .bt-input-confirm:hover {
   color: #f3f3f3;
   background: #089e00;
+}
 
+.progressbar-confirm {
+  margin-top: 80px;
 }

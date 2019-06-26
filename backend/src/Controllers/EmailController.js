@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const redis = require('redis');
 
-const cache = redis.createClient(7001, '127.0.0.1');
+const cache = redis.createClient(7001, '192.168.99.100'); // 127.0.0.1
 
 const generateCode = () => Math.random()
   .toString(36)
@@ -22,7 +22,7 @@ const deleteKeyCache = (email) => {
 
 const sendEmail = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, electionName } = req.body;
 
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
@@ -44,7 +44,16 @@ const sendEmail = async (req, res) => {
       to: email,
       subject: 'Código de verificação',
       text: `Código: ${randomCode}`,
-      html: `<b>Código: ${randomCode}</b>`,
+      html: `<main style="background-color:#fafafa;">
+      <section>
+        <h1 style="color:#540381; font-weigth:bold; align: center;" align="center">Eleições Blockchain</h1>
+        <h3 align="center">Você solicitou permissão na votação <span style="color:#540381" >${electionName}</span>, use o código abaixo para confirmar seu email.</h3>
+      </section>
+
+      <section style="border: 2px solid #540381; border-radius:5px; width: 200px; height: 65px;  color:#540381; font-weigth:bold; margin:0 auto;">
+        <h1 align="center">${randomCode.toUpperCase()}</h1>
+      </section>
+    </main>`,
     };
 
     await transporter.sendMail(message, (err, info) => {
