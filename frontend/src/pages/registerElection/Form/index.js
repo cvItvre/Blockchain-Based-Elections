@@ -70,11 +70,18 @@ export default  class Formulario1 extends Component{
           
 
           const match = (/^(.+?)\((\d+)\)$/gi).exec(lastElement);
-          const name = match[1].trim();
-          const number = parseInt(match[2], 10);
+          let name = null;
+          let number = null;
+          let alreadyHasCandidate = -1;
+          let alreadyHasNumber = -1;
+          if(match !== null) {
+            name = match[1].trim();
+            number = parseInt(match[2], 10);
+  
+            alreadyHasCandidate = arrayNames.indexOf(name);
+            alreadyHasNumber = arrayNumbers.indexOf(number);
+          }
 
-          const alreadyHasCandidate = arrayNames.indexOf(name);
-          const alreadyHasNumber = arrayNumbers.indexOf(number);
 
 
 
