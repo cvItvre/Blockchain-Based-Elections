@@ -10,6 +10,7 @@ const Router = express.Router();
  * getCountElections => /getCountElections
  * getWinnerRouter => /getWinner/:id
  * getCandidate => /getCandidate/:idElection/:idCandidate
+ * getCandidates => /getCandidate/:idElection
  * getContractOwner => /getContractOwner
  * getElection => /getElection/:id
  * getElections => /getElections
@@ -22,6 +23,7 @@ const Router = express.Router();
  * sendEmail => /sendEmail
  * validationEmail => /validationEmail
  * validationCode => /validationCode
+ * SearchElection => /searchElection
  *
  ******************************************* */
 
@@ -41,5 +43,6 @@ Router.post('/vote', ElectionController.sendVote);
 Router.post('/sendEmail', EmailController.sendEmail);
 Router.post('/validationEmail', EmailController.validationEmail);
 Router.post('/validationCode', EmailController.validationCode);
+Router.post('/searchElection', ElectionController.searchElection);
 
 module.exports = Router;

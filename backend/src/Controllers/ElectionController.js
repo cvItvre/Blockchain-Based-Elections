@@ -323,6 +323,30 @@ const getElectionsList = async (req, res) => {
 };
 
 /*
+  Ex: http://localhost:3001/api/searchElection/:search
+*/
+
+const searchElection = async (req, res) => {
+  try {
+    const { search } = req.body;
+    const numberOfElections = await getCountElectionsUtil();
+    const elections = [];
+    const regex = new RegExp(search, 'gi');
+    for (let index = 1; index <= numberOfElections; index++) {
+      const electionData = await getElectionsUtil(index);
+
+      if (electionData.electionName.search(regex) !== -1) {
+        elections.push(electionData);
+      }
+    }
+
+    res.json(elections);
+  } catch (e) {
+    res.status(500).send();
+  }
+};
+
+/*
   Ex: http://localhost:3001/api/canVote/1/teste@ufrpe.br
 */
 
@@ -365,6 +389,7 @@ const hasVoted = async (req, res) => {
 };
 
 module.exports = {
+  searchElection,
   getCountElections,
   getWinner,
   getCandidate,

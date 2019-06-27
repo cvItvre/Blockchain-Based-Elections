@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import SideBar from '../../components/sidebar';
 import { Link } from 'react-router-dom';
 import { InputText } from 'primereact/inputtext';
+import { Growl } from 'primereact/growl';
 import ReactMinimalPieChart from 'react-minimal-pie-chart';
 import './styles.css';
 import apiBlockchain from '../../services/apiBlockchain';
@@ -13,6 +14,7 @@ export default class Home extends Component {
   constructor() {
     super();
     this.state = {
+      electionFounds: [],
       elections: [],
       electionCount: 0,
       actualPageElections: [],
@@ -24,29 +26,38 @@ export default class Home extends Component {
     this.nextElections = this.nextElections.bind(this);
     this.previousElections = this.previousElections.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
+    this.searchElections = this.searchElections.bind(this);
+    this.resetElections = this.resetElections.bind(this);
   }
 
   async fetchAllElections() {
     const allElections = await apiBlockchain.get('/getElections');
-    const elections = [];
     const electionCount = await apiBlockchain.get('/getCountElections');
 
-    for (let i = 0; i < allElections.data.length; i++) {
-      const candidates = await this.getCandidates(allElections.data[i]);
+    const elections = await this.formatElection(allElections.data);
+
+    this.setState({
+      elections,
+      electionCount: electionCount.data.countElection,
+    });
+  }
+
+  async formatElection(allElections) {
+    const elections = [];
+
+    for (let i = 0; i < allElections.length; i++) {
+      const candidates = await this.getCandidates(allElections[i]);
 
       const formatedElection = {
-        id: allElections.data[i].electionID - 1,
-        electionName: allElections.data[i].electionName,
+        id: allElections[i].electionID - 1,
+        electionName: allElections[i].electionName,
         data: candidates,
       };
 
       elections.push(formatedElection);
     }
 
-    this.setState({
-      elections,
-      electionCount: electionCount.data.countElection,
-    });
+    return elections;
   }
 
   async getCandidates({ electionID, candidatesCount }) {
@@ -65,22 +76,33 @@ export default class Home extends Component {
     return candidates;
   }
 
-  searchElections() {
-    let expression = document.getElementById('home-search-input').value;
+  async searchElections() {
+    const search = document.getElementById('home-search-input').value;
 
-    console.log('search: ' + expression);
-    // TODO consume API to search for elections
+    if (search.trim() !== '') {
+      const electionFounds = await apiBlockchain.post('/searchElection', { search });
+
+      if (electionFounds.data.length === 0) {
+        this.growl.show({ severity: 'info', summary: 'Nenhuma votação encontrada!' });
+      } else {
+        const elections = await this.formatElection(electionFounds.data);
+        this.setState({ electionFounds: elections });
+      }
+    }
+  }
+
+  resetElections() {
+    const search = document.getElementById('home-search-input');
+    search.value = '';
+    this.setState({ electionFounds: [] });
   }
 
   async nextElections() {
     let { elections, previousPageElections, nextPageElections, actualPageElections, pageNumber } = this.state;
 
     if(this.thereIsNotNextPage()) {
-      // console.log('There is not next page');
       return;
     }
-
-    // console.log(this.state);
 
     previousPageElections = actualPageElections;
     actualPageElections = nextPageElections;
@@ -101,19 +123,14 @@ export default class Home extends Component {
       nextPageElections,
       pageNumber
     });
-
-    // console.log(this.state);
   }
 
   async previousElections() {
     let { elections, previousPageElections, nextPageElections, actualPageElections, pageNumber } = this.state;
 
     if(this.thereIsNotPreviousPage()) {
-      // console.log('There is not previous page');
       return;
     }
-
-    // console.log(this.state);
 
     nextPageElections = actualPageElections;
     actualPageElections = previousPageElections;
@@ -123,8 +140,6 @@ export default class Home extends Component {
 
     let index = (pageNumber-2) * NUMBER_OF_ELECTIONS_PER_PAGE;
     let indexEnd = index + 4;
-
-    console.log(index, indexEnd);
 
     for( ;index < indexEnd; index++ ) {
       previousPageElections.push(elections[index]);
@@ -137,8 +152,6 @@ export default class Home extends Component {
       nextPageElections,
       pageNumber
     });
-
-    console.log(this.state);
   }
 
   thereIsNotNextPage() {
@@ -161,7 +174,7 @@ export default class Home extends Component {
       actualPageElections.push(elections[i]);
     }
 
-    let nextPageElections = [];
+    const nextPageElections = [];
     for (let i = 4; i < 8 && i < electionCount; i++) {
       nextPageElections.push(elections[i]);
     }
@@ -173,21 +186,29 @@ export default class Home extends Component {
   }
 
   render() {
-    const { actualPageElections } = this.state;
+    const { actualPageElections, electionFounds } = this.state;
+    const ElectionsShows = electionFounds.length > 0 ? electionFounds : actualPageElections;
 
     return (
       <div className="home-wrapper">
       <SideBar />
+      <Growl
+          ref={(el) => {
+            this.growl = el;
+          }}
+        />
       <span className="p-float-label">
         <InputText id="home-search-input" />
-        <label className="lb-input" htmlFor="home-search-input">Search for Election</label>
+        <label className="lb-input" htmlFor="home-search-input">Buscar Votação</label>
         <button className="bt-input-send" onClick={this.searchElections}>
-            Search
+            Buscar
+        </button>
+        <button className="bt-input-reset" onClick={this.resetElections}>
+            Limpar
         </button>
       </span>
       <section className="home-content">
-        {actualPageElections.length > 0 &&
-          actualPageElections.map(election => (
+        {ElectionsShows.map(election => (
             <Link key={election.id} to={`/vote/${election.id + 1}`}>
               <section key={election.id} className="election-description">
                 <strong>{election.electionName}</strong>

@@ -4,7 +4,7 @@ import './styles.css';
 
 const footer = () => (
   <footer id="main-footer">
-    Footer Content
+    Todos os direitos reservados &copy;
   </footer>
 );
 
