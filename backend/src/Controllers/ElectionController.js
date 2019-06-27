@@ -234,11 +234,11 @@ const getCandidatesList = async (req, res) => {
     const electionID = req.params.idElection;
 
     const electionData = await getElectionsUtil(electionID);
-    const numberOfCandidates = electionData._candidatesCount;
+    const numberOfCandidates = electionData.candidatesCount;
 
     const candidates = [];
 
-    for (let index = 0; index < numberOfCandidates; index++) {
+    for (let index = 1; index <= numberOfCandidates; index++) {
       const candidateData = await getCandidateUtil(electionID, index);
       candidates.push(candidateData);
     }
@@ -310,7 +310,7 @@ const getElectionsList = async (req, res) => {
     const numberOfElections = await getCountElectionsUtil();
     const elections = [];
 
-    for (let index = 0; index < numberOfElections; index++) {
+    for (let index = 1; index <= numberOfElections; index++) {
       const electionData = await getElectionsUtil(index);
 
       elections.push(electionData);

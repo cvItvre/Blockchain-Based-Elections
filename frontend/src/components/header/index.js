@@ -4,7 +4,7 @@ import './styles.css';
 
 const header = () => (
     <header id="main-header">
-        Ethereum Elections
+      Elections Blockchain
     </header>
 );
 

@@ -13,16 +13,22 @@ class chart extends Component {
       data: this.props.data,
     };
     this.updateStopwatch = this.updateStopwatch.bind(this);
+    this.componentWillUnmount = this.componentWillUnmount.bind(this);
   }
 
   componentDidMount() {
-    setInterval(this.updateStopwatch, 1000);
+    const idInterval = setInterval(this.updateStopwatch, 1000);
+    this.setState({ idInterval });
+  }
+
+  componentWillUnmount() {
+    const { idInterval } = this.state;
+    clearInterval(idInterval);
   }
 
   async updateStopwatch() {
     const { data } = this.state;
     const stopwatch = document.querySelector('.stopwatch');
-    console.log(stopwatch);
     const dateNow = new Date().getTime() / 1000;
     let currentTimeOpening = data.openingTime - Math.round(dateNow);
     let currentTimeClosing = data.closingTime - Math.round(dateNow);

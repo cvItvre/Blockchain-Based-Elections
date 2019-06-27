@@ -120,12 +120,14 @@ export default class ConfirmationForm extends Component {
               summary: 'Erro',
               detail: 'Não foi possível acessar o servidor, tente novamente mais tarde.'
             })
+            this.setState({ loading: false });
         }else {
           this.messages.show({
             severity: 'info',
             summary: 'Erro',
             detail: 'Não foi possível cadastrar a eleição verifique se os dados estão corretos, ou se você tem o direito de cadastrar.'
           })
+          this.setState({ loading: false });
         }
       })
 
