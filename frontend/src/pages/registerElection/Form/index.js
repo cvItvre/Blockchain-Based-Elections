@@ -52,24 +52,43 @@ export default  class Formulario1 extends Component{
         }
           
         this.handleCandidatesChange = (_candidates) => {
+          const arrayNames = [];
+          const arrayNumbers = [];
+
+          for(let i of this.state.candidates) {
+            const match = (/^(.+?)\((\d+)\)$/gi).exec(i);
+            const name = match[1].trim();
+            const number = parseInt(match[2], 10);
+            arrayNames.push(name);
+            arrayNumbers.push(number);
+          }
           
           let slice = '';
           let lastElement = _candidates.slice(-1)[0];
           let regex = /^[a-zà-úâ-ôã A-ZÀ-ÚÂ-ÔÃ]{2,20}\([0-9]{1,30}\)$/;
+          slice = _candidates;
+          
 
-          if(_candidates[0] === 'Aceitos: Amaury Tavares (10) ou Amaury Tavares(10)') {
-              slice = _candidates.slice(1);
-          }else {
-              slice = _candidates;
-          }
+          const match = (/^(.+?)\((\d+)\)$/gi).exec(lastElement);
+          const name = match[1].trim();
+          const number = parseInt(match[2], 10);
+
+          const alreadyHasCandidate = arrayNames.indexOf(name);
+          const alreadyHasNumber = arrayNumbers.indexOf(number);
+
+
+
           
-          // if(typeof lastElement === 'undefined') {
-          //     slice = '';
-          // }
-          
-          if(regex.test(lastElement) || typeof lastElement === 'undefined') {
+          if(alreadyHasCandidate === -1 && alreadyHasNumber === -1 && regex.test(lastElement)) {
             this.setState({candidates: slice});
             this.props.onCandidatesChange(slice);
+          }else if(alreadyHasCandidate !== -1 || alreadyHasNumber !== -1) {
+            this.messages.show({
+              severity: 'info',
+              summary: 'Candidato inválido ',
+              detail: 'Nome ou número de candidato já existente.'
+            })
+            this.props.onCandidatesChange(false);
           }else {
             this.messages.show({
               severity: 'info',

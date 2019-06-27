@@ -133,18 +133,6 @@ export default class ConfirmationForm extends Component {
 
     }
 
-    this.isNumber = (num) => { //deve ter alguma função primitiva pra isso, mas como eu to sem paciencia vai assim mesmo.
-      let bool = false;
-      for(let i = 0; i < 10; i++) {
-        if(num == i) { // sim a comparação deve ser feita com '==';
-          bool = true;
-          break;
-        }
-      }
-
-      return bool;
-    }
-
     this.cadastrarCandidatos = async (json) => {
       const status = await apiBlockchain.post('/addCandidate', json).catch(() => {
         this.growl.show({ severity: 'error', summary: 'Erro ao cadastrar candidatos' });
