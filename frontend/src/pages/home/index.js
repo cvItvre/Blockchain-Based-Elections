@@ -8,6 +8,10 @@ import ReactMinimalPieChart from 'react-minimal-pie-chart';
 import './styles.css';
 import apiBlockchain from '../../services/apiBlockchain';
 const NUMBER_OF_ELECTIONS_PER_PAGE = 4;
+const FACTOR_MULTIPLICATION = 25;
+const FACTOR_DIFFERENCE_COLOR = 40;
+
+/* eslint-disable */
 
 export default class Home extends Component {
 
@@ -28,6 +32,27 @@ export default class Home extends Component {
     this.componentDidMount = this.componentDidMount.bind(this);
     this.searchElections = this.searchElections.bind(this);
     this.resetElections = this.resetElections.bind(this);
+    this.swapCandidates = this.swapCandidates.bind(this);
+    this.sortDecreasingCandidatesOrder = this.sortDecreasingCandidatesOrder.bind(this);
+  }
+
+  swapCandidates(candidates, i, k) {
+    let aux = candidates[k];
+    candidates[k] = candidates[i];
+    candidates[i] = aux;
+  }
+
+  sortDecreasingCandidatesOrder(candidates) {
+    for(let k = 0; k < candidates.length; k++) {
+      for(let i = k + 1; i < candidates.length; i++) {
+
+        if(candidates[i].voteCount > candidates[k].voteCount)
+          this.swapCandidates(candidates, i, k);
+
+      }
+    }
+
+    return candidates;
   }
 
   async fetchAllElections() {
@@ -62,16 +87,62 @@ export default class Home extends Component {
 
   async getCandidates({ electionID, candidatesCount }) {
     const candidates = [];
-    const candidatesList = await apiBlockchain.get(`/getCandidates/${electionID}`);
+    let candidatesList = await apiBlockchain.get(`/getCandidates/${electionID}`);
     const haveVote = false;
 
-    candidatesList.data.map((candidate) => {
+    let red = Math.floor(Math.random() * 150);
+    let green = Math.floor(Math.random() * 150);
+    let blue = Math.floor(Math.random() * 150);
+
+    candidatesList.data = this.sortDecreasingCandidatesOrder(candidatesList.data);
+
+    if(candidatesList.data.length > 3) {
+      
+      red = (red + FACTOR_DIFFERENCE_COLOR) % 150;
+      green = (green + FACTOR_DIFFERENCE_COLOR) % 150;
+      blue = (blue + FACTOR_DIFFERENCE_COLOR) % 150;
+      let candidate = candidatesList.data[0];
       candidates.push({
         title: candidate.name,
-        value: candidate.voteCount || 1,
-        color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+        value: candidate.voteCount*FACTOR_MULTIPLICATION || 1,
+        color: `rgb(${red}, ${green}, ${blue})`
       });
-    });
+
+      red = (red + FACTOR_DIFFERENCE_COLOR) % 150;
+      green = (green + FACTOR_DIFFERENCE_COLOR) % 50;
+      blue = (blue + FACTOR_DIFFERENCE_COLOR) % 150;
+      candidate = candidatesList.data[1];
+      candidates.push({
+        title: candidate.name,
+        value: candidate.voteCount*FACTOR_MULTIPLICATION || 1,
+        color: `rgb(${red}, ${green}, ${blue})`
+      });
+
+      red = (red + FACTOR_DIFFERENCE_COLOR) % 150;
+      green = (green + FACTOR_DIFFERENCE_COLOR) % 50;
+      blue = (blue + FACTOR_DIFFERENCE_COLOR) % 150;
+      let totalOthersVoteCount = candidatesList.data.slice(2).reduce( (sum, candidate) => (Number(sum) + Number(candidate.voteCount)), 0 );
+      candidates.push({
+        title: "Outros",
+        value: totalOthersVoteCount*FACTOR_MULTIPLICATION || 1,
+        // color: `rgb(${Math.floor(Math.random() * 150)}, ${Math.floor(Math.random() * 50)}, ${Math.floor(Math.random() * 250)})`
+        color: "rgb(0,200,0)"
+      });
+    
+    } else {
+
+      candidatesList.data.map((candidate) => {
+        red = (red + FACTOR_DIFFERENCE_COLOR) % 150;
+        green = (green + FACTOR_DIFFERENCE_COLOR) % 50;
+        blue = (blue + FACTOR_DIFFERENCE_COLOR) % 150;
+        candidates.push({
+          title: candidate.name,
+          value: candidate.voteCount*FACTOR_MULTIPLICATION || 1,
+          color: `rgb(${Math.floor(Math.random() * 150)}, ${Math.floor(Math.random() * 50)}, ${Math.floor(Math.random() * 250)})`
+        });
+      });
+    
+    }
 
     return candidates;
   }
@@ -221,6 +292,7 @@ export default class Home extends Component {
                   }}
                   animate
                   lineWidth={40}
+                  paddingAngle={1}
                 />
                 <ul>
                   {election.data.map((candidate, index) => {

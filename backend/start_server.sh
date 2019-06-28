@@ -27,7 +27,7 @@ CONTRACT_ADDRESS=$(node ./src/deployContract.js $OWNER_ADDRESS)
 echo "Deployed contract - address: $CONTRACT_ADDRESS"
 
 echo "Initializing service ..."
-npx --no-install -c nodemon ./server.js $CONTRACT_ADDRESS
+npx --no-install nodemon ./server.js $CONTRACT_ADDRESS
 
 
 

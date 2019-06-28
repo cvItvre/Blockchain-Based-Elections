@@ -20,7 +20,8 @@
   display: flex;
 }
 
-.bt-input-send, .bt-input-reset {
+.bt-input-send,
+.bt-input-reset {
   margin-left: 10px;
   background: #f3f3f3;
   border: 1px solid #089e00;
@@ -41,7 +42,7 @@
   border: 1px solid #375ff8;
 }
 
-.bt-input-reset:hover  {
+.bt-input-reset:hover {
   color: #f3f3f3;
   background: #375ff8;
 }

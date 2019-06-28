@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const redis = require('redis');
 
-const cache = redis.createClient(7001, '192.168.99.100'); // 127.0.0.1
+const cache = redis.createClient(7001, '127.0.0.1'); // 127.0.0.1 bixo deixa assim ... kkk
 
 const generateCode = () => Math.random()
   .toString(36)

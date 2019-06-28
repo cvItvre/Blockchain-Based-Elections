@@ -1,19 +1,21 @@
-import React from 'react';
+import React from "react";
 
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-import './styles.css';
+import "./styles.css";
 
-const button = (props) => {
+/* eslint-disable */
+
+const button = props => {
   const { url, description, image } = props;
 
   return (
     <div className="button-sidebar-wrapper">
-      <Link to={url} className="button-sidebar" >
+      <Link to={url} className="button-sidebar">
         <img src={image} />
-      </ Link >
+      </Link>
       {/* <a className="b ar" href={url}>
         <img src={image} />
       </a> */}
@@ -25,7 +27,7 @@ const button = (props) => {
 button.propTypes = {
   url: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired
 };
 
 export default button;
