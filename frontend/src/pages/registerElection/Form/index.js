@@ -107,21 +107,6 @@ export default  class Formulario1 extends Component{
           }
 
         }
-
-        let br = {
-            firstDayOfWeek: 1,
-            dayNames: ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira", "sábado"],
-            dayNamesShort: ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"],
-            dayNamesMin: ["DOM", "SEG", "TER", "QUI", "QUA", "SEX", "SAB"],
-            monthNames: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
-            monthNamesShort: ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"],
-            today: 'Hoje',
-            clear: 'Limpo',
-            dateFormat: 'dd/mm/yy',
-            weekHeader: 'Sm'
-        };
-
-        let arrayAux = ['Aceitos: Amaury Tavares (10) ou Amaury Tavares(10)']
     
         return (
             <form className="main-form">
@@ -243,8 +228,6 @@ export default  class Formulario1 extends Component{
       dateFormat: "dd/mm/yy",
       weekHeader: "Sm"
     };
-
-    let arrayAux = ["Aceitos: Amaury Tavares (10) ou Amaury Tavares(10)"];
 
     return (
       <form className="main-form">
