@@ -1,6 +1,64 @@
-# Sistema de Votação Eletrônica Baseada na Etehreum Blockchain
+# Sistema de Votação Eletrônica Baseada na Ethereum Blockchain
 
 Sistema para votação eletrônica usando como base a Ethereum Blockchain. O uso da Blockchain garante a imutabilidade do dado, a eliminação do ponto único de falha, a distribuição dos dados e confiabialidade. Junto a isso temos o *smart contract* que nos garante a transparência, o voto único e o voto secreto.
+
+## Como executar a aplicação?
+
+Primeiro instale as dependências:
+
+* [Node.js](https://nodejs.org/en/) - Interpretador de código JavaScript.
+* [Ganache](https://truffleframework.com/ganache) - Blockchain local para o teste de DApps.
+* [MetaMask](https://metamask.io/) - Extensão para o Google Chrome que permite se conectar à uma rede Ethereum e interagir com os smart contracts diretamente pelo Browser.
+* [Docker](https://www.docker.com/) - Docker é uma tecnologia de software que fornece contêineres.
+
+Após instalar as dependências, vamos começar configurando o Docker.
+Abra o terminal do Docker e digite os seguintes comandos:
+
+```
+docker pull redis
+```
+```
+docker run --name cacheBlockchain -p 7001:6379 -d redis
+```
+
+Isso fará o docker criar um container de um banco de dados Redis, que será usado pela aplicação.
+
+Em seguida abra o Ganache e clique em "Quickstart" para iniciar uma rede blockchain local na porta 7545.
+
+Para se conectar à essa rede, é necessário abrir o MetaMask e seguir o passo a passo(no próprio MetaMask) para criar uma conta, após criar uma conta é possível criar uma conexão de rede clicando no botão superior direito(onde mostra o nome da rede), e em seguida clicando na opção "Customizar RPC", preenchendo o campo "Network Name" com "Election" e o campo "New RPC URL" com "http://localhost:7545", após criar a conexão você poderá usa-la (com o Ganache aberto). Agora vamos adicionar uma conta da rede local no MetaMask, indo no Ganache é possível ver os endereços de cada conta no lado esquerdo e no lado direito um botão em forma de chave, clicando nesse botão obtem-se a chave privada da conta, copie essa chave, e volte ao o MetaMask no botão superior direito, selecione a opção "Importar Conta" e coloque a chave privada copiada do Ganache. Após isso a blockchain e o MetaMask estará configurado.
+
+Voltando a aplicação (antes selecione um endereço qualquer do Ganache para ser o dono do contrato), vá até a pasta "backend\src\" e execute o seguinte código: 
+```
+node deployContract.js <endereço do dono>
+```
+
+Após isso o contrato foi implantado na rede local. Esse comando retornará o endereço do contrato, que será usado pela aplicação, vá até o arquivo "backend\src\Controllers\ElectionController.js" e altere a variável "contractAddress" para o endereço que foi retornado no comando anterior.
+
+Para finalizar a configuração vá até o arquivo "backend\src\Controllers\EmailController.js" e altere o ip da conexão com o container do Docker.
+```
+const cache = redis.createClient(7001, <ip do container>);
+```
+
+Se o seu sistema operacional for Windows, pode-se obter esse IP executando o seguinte comando no Docker:
+```
+docker-machine ip
+```
+
+Se seu sistema operacional for Linux ou Mac, o ip usado será "127.0.0.1".
+
+Após finalizar a configuração do projeto, vá a pasta "backend\" e execute:
+```
+npm i && npm run dev
+```
+
+E vá até a pasta "frontend\" e execute:
+```
+npm i && npm run start
+```
+
+Aguarde o backend e o frontend iniciar e poderá usar a aplicação normalmente.
+
+Observações: Apenas o endereço do dono do contrato poderá criar votações, e o tempo inicial da votação tem que ser pelo menos 1 minuto maior que o tempo atual.
 
 ## Getting Started
 
